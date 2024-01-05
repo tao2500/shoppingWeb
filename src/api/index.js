@@ -20,3 +20,14 @@ export const addApps = params => {
         }
     });
 }
+
+export const getAuthCode = params => {
+    return request({
+        url: '/apisaas_add_app',
+        params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}

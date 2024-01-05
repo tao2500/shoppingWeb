@@ -3,6 +3,12 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 // 路由规则
 const routes = [
+    {
+        path: '/login',
+        name: 'login',
+        meta: {title: '登录'},
+        component: () => import('../views/login.vue'),
+    }
     // { path: '/', redirect: 'my' },
     // {
     //     path: '/my',
@@ -75,11 +81,6 @@ const routes = [
     //         meta: {title: '调用记录（最多保留最近一个月的记录，仅用于查找问题）'},
     //         component: () => import('../components/MyUsageRecord.vue'),
     //     }]
-    // }, {
-    //     path: '/login',
-    //     name: 'login',
-    //     meta: {title: '登录'},
-    //     component: () => import('../components/myLogin.vue'),
     // }
 ];
 
