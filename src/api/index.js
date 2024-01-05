@@ -1,4 +1,4 @@
-import request from '../utils/index.js';
+import request from '../utils/http.js';
 
 // const token = localStorage.getItem('token') || '';
 
@@ -6,7 +6,7 @@ import request from '../utils/index.js';
 返回目前使用的域名
  */
 export const funcGetDomain = () => {
-    return 'http://localhost:8080';
+    return 'http://localhost:8080/shopping/';
 };
 
 // 添加应用

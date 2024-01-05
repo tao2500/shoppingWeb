@@ -2,14 +2,14 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
 const service = axios.create({
-    baseURL: 'http://localhost:8080',
-    timeout: 10000
+    baseURL: '/api',
+    timeout: 5000,
 });
 
 // 请求拦截器
 service.interceptors.request.use(
     config => {
-        // config.headers.icode = "8a12d7de6c02c77468b45cdab958b475";
+        // config.headers.code = "8a12d7de6c02c77468b45cdb958b475";
         // if (store.getters.token) {
         //   // 如果token存在 注入token
         //   config.headers.Authorization = `Bearer ${store.getters.token}`;
@@ -26,7 +26,7 @@ service.interceptors.response.use(
     response => {
         // console.log('[ response ] >', response, response);
 
-        if (response.data.errcode) {
+        if (response.data.state === 0) {
             ElMessage.error(response.data.msg);
         }
         return response;
