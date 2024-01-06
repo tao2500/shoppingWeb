@@ -1,6 +1,6 @@
 <!--
  * @author: 2500594037@qq.com
- * @since: 2024-01-05
+ * @since: 2024-1-6
 -->
 <template>
     <el-container class="maLog">
@@ -27,25 +27,41 @@
         <el-container>
             <el-main class="main">
                 <span class="logo">
-                     <img src="../assets/img/login/logo.png" /><span class="line"></span> <span class="logoText">您身边的好药房</span>
+                    <span class="logoT">康无忧</span> <span class="line"></span> <span class="logoText">您身边的好药房</span>
                 </span>
-                    <br>
-                    <span class="loginBox">
-                    <p class="loginType">验证码登录</p>
+                <br>
+                <span class="loginBox">
+                    <ul class="type">
+                        <li data-selectType="/online" class="Tli">
+                            <el-radio-group v-model="chargeLoginType" size="large" @change="selectType">
+                                <el-radio class="but" :class="{butColor : actionType}" label="账号登录"></el-radio>
+                                <el-radio class="but" :class="{butColor : actionType === false}" label="验证码登录"></el-radio>
+                            </el-radio-group>
+                        </li>
+                    </ul>
                     <span class="line"></span>
-                    <br>
-                    <el-input class="inputT" placeholder="请输入手机号码" v-model="phone" :prefix-icon="Cellphone"></el-input>
-                    <br>
-                    <el-input class="inputP" placeholder="请输入短信验证码" v-model="VCode" :prefix-icon="Lock"></el-input>
-                    <el-button class="getCode" @click="getCode">获取验证码</el-button>
-                    <p class="checkBox">
-                        <el-checkbox size="large" v-model="CState" @change="checkBoxChange"></el-checkbox> 我已阅读并同意 <span class="text1">《用户协议》</span> 和 <span class="text1">《隐私协议》</span> ，未注册的手机号将自动创建账号
-                    </p>
-                    <el-button class="loginBtn" ref="loginBth" @click="handelLogin">登录</el-button>
+                    <div v-show="VcodeLogin">
+                        <el-input class="inputT" placeholder="请输入手机号码" v-model="phone" :prefix-icon="Cellphone"></el-input>
+                        <br>
+                        <el-input class="inputP" placeholder="请输入短信验证码" v-model="VCode" :prefix-icon="Lock"></el-input>
+                        <el-button class="getCode" @click="getCode">获取验证码</el-button>
+                        <p class="checkBox">
+                            <el-checkbox size="large" v-model="CState" @change="checkBoxChange"></el-checkbox> 我已阅读并同意 <span class="text1">《用户协议》</span> 和 <span class="text1">《隐私协议》</span> ，未注册的手机号将自动创建账号
+                        </p>
+                        <el-button class="loginBtn" ref="loginBth" @click="handelLogin">登录</el-button>
+                    </div>
+                    <div v-show="passLogin">
+                        <el-input class="inputT" placeholder="请输入账号" v-model="account" :prefix-icon="User"></el-input>
+                        <br>
+                        <el-input class="passInputP" placeholder="请输入密码" v-model="password" :prefix-icon="Lock"></el-input>
+                        <p class="checkBox">
+                            <el-checkbox size="large" v-model="CPState" @change="passCheckBoxChange"></el-checkbox> 我已阅读并同意 <span class="text1">《用户协议》</span> 和 <span class="text1">《隐私协议》</span>
+                        </p>
+                        <el-button class="loginBtn PLB" ref="PLB" @click="handelPassLogin">登录</el-button>
+                    </div>
                 </span>
 
             </el-main>
-            <div class="returnOfficial"><a class="returnOfficialText" href="http://zhizengzeng.com" target="_blank">返回商城首页</a></div>
             <el-footer class="foot">
                 <!--<br>-->
                 <span class="footTwo">© 2024 康无忧 京ICP备2024044988号</span><span class="footOne"> <span class="link" @click="showContactUs">联系我们</span> <span class="link" @click="showJoinTheCommunity"></span> </span>
@@ -57,43 +73,31 @@
     <div class="contactUs" v-show="contactUs">
         <div class="Smegma" @click="showContactUs"></div>
         <div class="imgBox">
-            <img src="../assets/img/myFoot/contactUs.png">
-        </div>
-    </div>
-    <div class="contactUs" v-show="joinTheCommunity">
-        <div class="Smegma" @click="showJoinTheCommunity"></div>
-        <div class="imgBox">
-            <img src="../assets/img/myFoot/JoinTheCommunity.png">
+            <img src="../assets/img/login/contactUs.png">
         </div>
     </div>
 </template>
 
 <script setup>
+    import { Cellphone, Lock, User } from "@element-plus/icons-vue";
     import {onBeforeMount, ref} from "vue";
-    import {getAuthCode} from "../api/index.js";
+    import {adminLogin, customerLogin, getAuthCode} from "../apis/login/index.js";
     import {ElLoading, ElMessage} from "element-plus";
     import router from "../router/index.js";
 
     onBeforeMount(async () => {
         if (localStorage.getItem('token')) {
             ElMessage.success("已经登录啦");
-            // await router.replace({path: "/my"});
+            // await router.replace({path: "/home"});
         }
     })
 
     const userInfo = ref({
         id: null,
-        unionid: null,
-        user_name: "请先登录",
-        user_phone: "请先登录",
-        user_coin: 0,
-        user_tokens_cnt: 0,
-        vip_level: 0,
-        vip_time: 0,
-        myMoney: true,
-        myTokenMoney: true,
-        tokens_desc: 'Tokens余额：',
-        tokens_val: '0  个',
+        telephone: null,
+        name: null,
+        address: null,
+        password: null,
     })
 
     let CState = ref(false);
@@ -105,6 +109,16 @@
             loginBth.style.backgroundColor = "#8793AC";
         }
     }
+    let CPState = ref(false);
+    const passCheckBoxChange = () => {
+        const PLB = document.getElementsByClassName("PLB")[0];
+        if(CPState.value) {
+            PLB.style.backgroundColor = "#2365F3";
+        }else {
+            PLB.style.backgroundColor = "#8793AC";
+        }
+    }
+
     let phone = ref('');
     let VCode = ref('');
     let RVCodeTime = ref(60);
@@ -197,14 +211,87 @@
         console.log("handelLogin", data);
     };
 
+    let account = ref('');
+    let password = ref('');
+    const handelPassLogin = async () => {
+        if(!CPState.value) {
+            ElMessage.warning("请先同意用户协议和隐私协议");
+            return ;
+        }
+        if (account.value === "") {
+            ElMessage.warning("请输入账号");
+            return ;
+        }
+        if (password.value === "") {
+            ElMessage.warning("请输入密码");
+            return ;
+        }
+        const loading = ElLoading.service({
+            lock: true,
+            text: '登录中，请稍后...',
+            background: 'rgba(0, 0, 0, 0.7)',
+        })
+        customerLogin({
+            telephone: account.value,
+            password: password.value,
+        }).then(res => {
+            if (res.code === "200") {
+                console.log("登录成功", res);
+                userInfo.value = res.items[0];
+                localStorage.setItem("customer", JSON.stringify(userInfo.value));
+                localStorage.setItem("admin", "false");
+                ElMessage.success("登录成功");
+                loading.close();
+                router.replace({path: "/home"});
+            } else {
+                // 尝试管理员登录
+                adminLogin({
+                    name: account.value,
+                    password: password.value,
+                }).then(res => {
+                    if (res.code === "200") {
+                        console.log("登录成功", res);
+                        userInfo.value = res.items[0];
+                        localStorage.setItem("customer", JSON.stringify(userInfo.value));
+                        localStorage.setItem("admin", "true");
+                        ElMessage.success("登录成功");
+                        loading.close();
+                        router.replace({path: "/home"});
+                    } else {
+                        loading.close();
+                        ElMessage.warning(res.msg);
+                    }
+                }).catch(err => {
+                    loading.close();
+                    ElMessage.error("账号或密码错误！");
+                });
+            }
+        }).catch(err => {
+            loading.close();
+            ElMessage.error("登录失败");
+            console.log("登录失败", err);
+        });
+    };
+
     let contactUs = ref(false);
     function showContactUs() {
         contactUs.value = !contactUs.value;
     }
 
-    let joinTheCommunity = ref(false);
-    function showJoinTheCommunity() {
-        joinTheCommunity.value = !joinTheCommunity.value;
+    let chargeLoginType = ref("账号登录");
+    let passLogin = ref(true);
+    let VcodeLogin = ref(false);
+    let actionType = ref(true);
+    function selectType(e) {
+        if (e === '账号登录') {
+            actionType.value = true;
+            passLogin.value = true;
+            VcodeLogin.value = false;
+        } else {
+            actionType.value = false;
+            VcodeLogin.value = true;
+            passLogin.value = false;
+        }
     }
 </script>
 
@@ -275,6 +362,14 @@
           position: relative;
           top: -4px;
         }
+        .logoT {
+          color: #333333;
+          font-size: 26px;
+          font-family: PingFang SC-Regular, PingFang SC;
+          font-weight: 400;
+          position: relative;
+          top: -10px;
+        }
         .logoText {
           font-size: 26px;
           font-family: PingFang SC-Regular, PingFang SC;
@@ -289,18 +384,29 @@
       .loginBox{
         display: inline-block;
         width: 360px;
-        .loginType {
-          font-size: 20px;
-          font-family: PingFang SC-Bold, PingFang SC;
-          font-weight: bold;
-          color: #333333;
-          line-height: 0px;
-          -webkit-background-clip: text;
-          width: 100px;
-          opacity: 1;
-          padding-bottom: 20px;
-          margin: 60px 0 -14px 0;
-          border-bottom: 3px solid #2365F3;
+        .type {
+          margin: 30px 0 -14px 0;
+          .Tli {
+            display: inline-block;
+            margin-left: -40px;
+            border: none;
+            .but {
+              font-family: PingFang SC-Bold, PingFang SC;
+              font-weight: bold;
+              color: #333333;
+              line-height: 0px;
+              opacity: 1;
+              :deep(.el-radio__input) {
+                display: none !important;
+              }
+              :deep(.el-radio__label) {
+                font-size: 18px !important;
+              }
+            }
+            .butColor {
+              border-bottom: 3px solid #2365F3;
+            }
+          }
         }
         .line {
           display: inline-block;
@@ -316,7 +422,7 @@
           opacity: 1;
           border: 1px solid #E2E2E2;
           margin-top: 20px;
-            font-size:16px;
+          font-size:16px;
         }
         .inputP {
           width: 235px;
@@ -326,7 +432,16 @@
           opacity: 1;
           border: 1px solid #E2E2E2;
           margin-top: 20px;
-            font-size:16px;
+          font-size:16px;
+        }
+        .passInputP {
+          height: 48px;
+          background: #FFFFFF;
+          border-radius: 5px 5px 5px 5px;
+          opacity: 1;
+          border: 1px solid #E2E2E2;
+          margin-top: 20px;
+          font-size:16px;
         }
         .getCode {
           width: 115px;
@@ -369,21 +484,6 @@
           opacity: 1;
           margin-top: 40px;
         }
-      }
-    }
-    .returnOfficial {
-      position: fixed;
-      top: 3px;
-      right: 10px;
-      .returnOfficialText {
-        cursor: pointer;
-        height: 20px;
-        font-size: 14px;
-        font-family: PingFang SC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #2365F3;
-        margin-left: 10px;
-        -webkit-background-clip: text;
       }
     }
     .foot{

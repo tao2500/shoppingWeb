@@ -1,15 +1,26 @@
 // index.js
-import { createRouter, createWebHashHistory } from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 
 // 路由规则
 const routes = [
+    {
+        path: '/',
+        name: 'home',
+        meta: {title: '商城首页'},
+        component: () => import('../views/home.vue'),
+    },
     {
         path: '/login',
         name: 'login',
         meta: {title: '登录'},
         component: () => import('../views/login.vue'),
-    }
-    // { path: '/', redirect: 'my' },
+    },
+    {
+        path: '/home',
+        name: 'home',
+        meta: {title: '商城首页'},
+        component: () => import('../views/home.vue'),
+    },
     // {
     //     path: '/my',
     //     name: 'my',

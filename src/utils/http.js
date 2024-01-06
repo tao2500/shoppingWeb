@@ -2,8 +2,8 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
 const service = axios.create({
-    baseURL: '/api',
-    timeout: 5000,
+    baseURL: "/api",
+    timeout: 30000,
 });
 
 // 请求拦截器
@@ -29,7 +29,7 @@ service.interceptors.response.use(
         if (response.data.state === 0) {
             ElMessage.error(response.data.msg);
         }
-        return response;
+        return response.data;
         // const { success, message, data } = response.data;
         //   要根据success的成功与否决定下面的操作
         // if (success) {

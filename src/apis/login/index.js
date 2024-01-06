@@ -1,6 +1,4 @@
-import request from '../utils/http.js';
-
-// const token = localStorage.getItem('token') || '';
+import request from '../../utils/http.js';
 
 /*
 返回目前使用的域名
@@ -9,10 +7,20 @@ export const funcGetDomain = () => {
     return 'http://localhost:8080/shopping/';
 };
 
-// 添加应用
-export const addApps = params => {
+export const customerLogin = params => {
     return request({
-        url: '/apisaas_add_app',
+        url: '/customer/login',
+        params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export const adminLogin = params => {
+    return request({
+        url: '/pharmacist/login',
         params,
         method: 'post',
         headers: {
