@@ -1,4 +1,5 @@
 import request from '../../utils/http.js';
+import qs from 'qs';
 
 /*
 返回目前使用的域名
@@ -34,6 +35,17 @@ export const getAuthCode = params => {
         url: '/apisaas_add_app',
         params,
         method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export const addCustomer = params => {
+    return request({
+        url: '/customer/addTwo',
+        method: 'post',
+        data: params,
         headers: {
             'Content-Type': 'application/json'
         }
