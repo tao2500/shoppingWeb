@@ -79,10 +79,10 @@
                         <el-form-item label="确认密码" prop="checkPass">
                             <el-input type="password" show-password v-model="ruleForm.checkPass"></el-input>
                         </el-form-item>
-                        <el-form-item>
+                        <div style="text-align: right;">
                             <el-button type="primary" @click="goLogUp">立即注册</el-button>
-                            <el-button @click="handleClose">取消</el-button>
-                        </el-form-item>
+                            <el-button @click="handleClose">取 消</el-button>
+                        </div>
                     </el-form>
                 </el-dialog>
             </el-main>
@@ -115,7 +115,7 @@
     onBeforeMount(async () => {
         if (localStorage.getItem('customer')) {
             ElMessage.success("已经登录啦");
-            // await router.replace({path: "/home"});
+            await router.replace({path: "/home"});
         }
     })
 
