@@ -1,3 +1,7 @@
+<!--
+ * @author: 2500594037@qq.com
+ * @since: 2024-01-07
+-->
 <template>
     <div className="title">
         <div className="title-left">
@@ -11,7 +15,7 @@
             <router-link to="/myCart">
                 　　<span className="">我的购物车</span>
             </router-link>
-            <router-link to="/myOder">
+            <router-link to="/myOrder">
                 　　<span className="">我的订单</span>
             </router-link>
             <router-link to="/admin">

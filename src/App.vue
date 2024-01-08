@@ -6,7 +6,7 @@
 <template>
     <Head></Head>
     <router-view></router-view>
-    <foot class="foot"></foot>
+    <Foot class="foot"></Foot>
 </template>
 
 <style scoped>

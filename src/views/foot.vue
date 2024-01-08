@@ -56,7 +56,7 @@
       .imgBox {
         display: block;
         width: 400px;
-        height: 400px;
+        height: 380px;
         margin: -50% auto;
         // 改变层级
         position: relative;
