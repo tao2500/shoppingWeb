@@ -5,16 +5,16 @@
             <router-link to="/home">
                 　　 <span className="">商城首页</span>
             </router-link>
-            <router-link to="/teacher">
+            <router-link to="/typeBrowsing">
                 　　<span className="">分类浏览</span>
             </router-link>
-            <router-link to="/signUp">
+            <router-link to="/myCart">
                 　　<span className="">我的购物车</span>
             </router-link>
-            <router-link to="/activity">
+            <router-link to="/myOder">
                 　　<span className="">我的订单</span>
             </router-link>
-            <router-link to="/signIn">
+            <router-link to="/admin">
                 　　<span className="">进入后台</span>
             </router-link>
         </div>
