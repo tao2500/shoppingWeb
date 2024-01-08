@@ -1,5 +1,4 @@
 import request from '../../utils/http.js';
-import qs from 'qs';
 
 /*
 返回目前使用的域名
@@ -22,17 +21,6 @@ export const customerLogin = params => {
 export const adminLogin = params => {
     return request({
         url: '/pharmacist/login',
-        params,
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-}
-
-export const getAuthCode = params => {
-    return request({
-        url: '/apisaas_add_app',
         params,
         method: 'post',
         headers: {

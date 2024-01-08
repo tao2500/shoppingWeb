@@ -8,6 +8,10 @@ const routes = [
         redirect: 'home'
     },
     {
+        path: '/my',
+        redirect: 'home'
+    },
+    {
         path: '/login',
         name: 'login',
         meta: {title: '登录'},

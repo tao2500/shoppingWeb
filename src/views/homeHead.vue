@@ -23,7 +23,7 @@
                 </el-icon>
                 <div class="logOutBox" v-show="listShow">
                     <div class="Smegma" @click="listShow = !listShow"></div>
-                    <div class="LBPhone">{{ userInfo.name }}</div>
+                    <div class="LBPhone">欢迎：{{ userInfo.name }}</div>
                     <div class="upDataMsg" v-show="!userInfo.duties" @click="upDataMsg">编辑资料</div>
                     <span class="logOutBoxLine"></span>
                     <p class="logout" @click="logOut">退出登录</p>
@@ -57,6 +57,7 @@
     import router from "../router/index.js";
     import homeHeadNav from "./homeHeadNav.vue";
     // import Login from "./myLogin.vue";
+    import {editCustomer} from "../apis/customer/customer.js";
 
     export default {
         name: 'MyHead',
@@ -103,7 +104,7 @@
                 }
                 router.replace({path: "/home"})
             }
-            let editMsgBox = ref(true);
+            let editMsgBox = ref(false);
             function upDataMsg() {
                 editMsg.value = JSON.parse(JSON.stringify(userInfo));
                 editMsgBox.value = true;
@@ -112,7 +113,19 @@
                 editMsgBox.value = false;
             };
             function edit() {
-                editClose();
+                editCustomer(editMsg.value).then(res => {
+                    if (res.code === "200") {
+                        ElMessage.success('修改成功');
+                        editClose();
+                        localStorage.setItem('customer', JSON.stringify(editMsg.value));
+                        userInfo.value = JSON.parse(JSON.stringify(editMsg.value));
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        ElMessage.error(res.msg);
+                    }
+                });
             }
 
             return {
@@ -256,6 +269,7 @@
           margin-top: 20px;
         }
         .upDataMsg {
+          color: #333333;
           margin: 10px 0 -20px 0;
         }
         .logOutBoxLine{
