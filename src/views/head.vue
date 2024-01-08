@@ -12,10 +12,10 @@
                 <span class="line"></span>
                 <span class="text textTwo">关爱您的健康</span>
             </div>
-            <home-head-nav></home-head-nav>
+            <head-nav></head-nav>
             <div class="company">
                 <div class="c_img">
-                    <img src="../assets/img/homeHead/cat.jpg" @click="listShow = !listShow"/>
+                    <img src="../assets/img/homeHead/wang.jpg" @click="listShow = !listShow"/>
                 </div>
                 <span class="c_name" @click="listShow = !listShow">{{ userInfo.name }}</span>
                 <el-icon class="below">
@@ -55,7 +55,7 @@
     import {ElMessage} from 'element-plus';
     import {ArrowDown} from "@element-plus/icons-vue";
     import router from "../router/index.js";
-    import homeHeadNav from "./homeHeadNav.vue";
+    import headNav from "./headNav.vue";
     // import Login from "./myLogin.vue";
     import {editCustomer} from "../apis/customer/customer.js";
 
@@ -63,7 +63,7 @@
         name: 'MyHead',
         components: {
             ArrowDown,
-            homeHeadNav,
+            headNav,
         },
         setup() {
             onBeforeMount(async () => {
