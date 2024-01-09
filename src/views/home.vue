@@ -55,17 +55,17 @@
         })
     }
 
-    let medic = ref({
+    let medic = ref([{
         img: '../assets/img/homeHead/wang.jpg',
         name: '阿莫西林',
         price: 10,
         count: 99,
-    });
+    }]);
 </script>
 
 <style lang="less" scoped>
     .home {
-      height: calc(100vh - 110px);
+      height: calc(100vh - 100px);
       overflow: auto;
       .search {
         text-align: right;
