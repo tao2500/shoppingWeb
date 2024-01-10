@@ -1,8 +1,10 @@
 <!--
  * @author: 2500594037@qq.com
  * @since: 2024-01-07
+ * @description: 商城首页
 -->
 <template>
+    <Head></Head>
     <div class="home">
         <div class="search">
             <span class="txt-search">
@@ -17,9 +19,12 @@
             <medicine class="med" :medic="m"></medicine>
         </div>
     </div>
+    <Foot></Foot>
 </template>
 
 <script setup>
+    import Head from "./head.vue";
+    import Foot from "./foot.vue";
     import {onBeforeMount, ref} from "vue";
     import Medicine from "./medicine.vue";
     import {getAllDrugs, getDrugByName} from "../apis/home/index.js";

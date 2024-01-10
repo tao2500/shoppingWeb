@@ -46,6 +46,32 @@ const routes = [
         name: 'admin',
         meta: {title: '管理后台'},
         component: () => import('../views/admin.vue'),
+        children: [{
+            path: '/admin/adminMedicine',
+            name: 'adminMedicine',
+            meta: {title: '管理后台-药品'},
+            component: () => import('../views/adminMedicine.vue'),
+        },{
+            path: '/admin/adminDelivery',
+            name: 'adminDelivery',
+            meta: {title: '管理后台-配送'},
+            component: () => import('../views/adminDelivery.vue'),
+        }, {
+            path: '/admin/adminOrder',
+            name: 'adminOrder',
+            meta: {title: '管理后台-订单'},
+            component: () => import('../views/adminOrder.vue'),
+        }, {
+            path: '/admin/adminAfterSales',
+            name: 'adminAfterSales',
+            meta: {title: '管理后台-售后'},
+            component: () => import('../views/adminAfterSales.vue'),
+        }, {
+            path: '/admin/adminStaff',
+            name: 'adminStaff',
+            meta: {title: '管理后台-员工'},
+            component: () => import('../views/adminStaff.vue'),
+        }]
     }
 ];
 

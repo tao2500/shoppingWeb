@@ -1,6 +1,7 @@
 <!--
  * @author: 2500594037@qq.com
  * @since: 2024-01-07
+ * @description: 头部组件导航栏
 -->
 <template>
     <div className="title">
@@ -18,7 +19,7 @@
             <router-link to="/myOrder">
                 　　<span className="">我的订单</span>
             </router-link>
-            <router-link to="/admin">
+            <router-link to="/admin/adminMedicine">
                 　　<span className="">进入后台</span>
             </router-link>
         </div>

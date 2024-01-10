@@ -1,6 +1,7 @@
 <!--
  * @author: 2500594037@qq.com
  * @since: 2024-01-09
+ * @description: 分类浏览页导航栏
 -->
 <template>
     <div class="TA">
@@ -49,7 +50,7 @@
         })
     }
 
-    let showDrawer = ref(true);
+    let showDrawer = ref(false);
 
 </script>
 

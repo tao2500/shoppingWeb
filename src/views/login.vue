@@ -1,6 +1,7 @@
 <!--
  * @author: 2500594037@qq.com
  * @since: 2024-1-6
+ * @description: 注册登录页面
 -->
 <template>
     <el-container class="maLog">

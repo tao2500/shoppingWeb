@@ -1,6 +1,7 @@
 <!--
  * @author: 2500594037@qq.com
  * @since: 2024-01-08
+ * @description: 药品展示组件
 -->
 <template>
     <el-card class="medicineBox">

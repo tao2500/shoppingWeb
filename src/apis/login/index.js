@@ -39,3 +39,15 @@ export const addCustomer = params => {
         }
     });
 }
+
+// 获取验证码
+export const getAuthCode = params => {
+    return request({
+        url: '/customer/getVerifyCode',
+        params,
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}

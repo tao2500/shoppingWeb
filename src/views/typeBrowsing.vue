@@ -1,8 +1,10 @@
 <!--
  * @author: 2500594037@qq.com
  * @since: 2024-01-07
+ * @description: 分类浏览页
 -->
 <template>
+    <Head></Head>
     <el-container class="TB">
         <el-main>
             <div class="showMedicine" v-for="m of medic">
@@ -13,10 +15,12 @@
             <typeAside @getDrugsByType="getDrugsByType"></typeAside>
         </el-aside>
     </el-container>
-
+    <Foot></Foot>
 </template>
 
 <script setup>
+    import Head from "./head.vue";
+    import Foot from "./foot.vue";
     import Medicine from "./medicine.vue";
     import typeAside from "./typeAside.vue";
     import {ref} from "vue";

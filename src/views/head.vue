@@ -1,6 +1,7 @@
 <!--
  * @author: 2500594037@qq.com
  * @since: 2024-01-07
+ * @description: 头部组件
 -->
 <template>
     <el-container>
