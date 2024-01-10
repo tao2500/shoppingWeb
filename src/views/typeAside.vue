@@ -8,9 +8,16 @@
             <el-button class="typeBut" v-for="t of allType" type="primary" size="small" @click="getDrugsByType(t)" >{{t}}</el-button>
         </div>
         <div>
-            <ArrowDownBold class="showAll"></ArrowDownBold>
+            <ArrowDownBold class="showAll" @click="showDrawer = true"></ArrowDownBold>
         </div>
-
+        <el-drawer
+                v-model="showDrawer"
+                title="全部类型如下"
+                direction="rtl"
+                size="15%"
+        >
+            <el-button class="EDTypeBut" v-for="t of allType" type="primary" size="small" @click="getDrugsByType(t)" >{{t}}</el-button>
+        </el-drawer>
     </div>
 
 </template>
@@ -41,6 +48,8 @@
             }
         })
     }
+
+    let showDrawer = ref(true);
 
 </script>
 
@@ -74,6 +83,13 @@
       // 居中
       position: relative;
       left: 50%;
+    }
+    .EDTypeBut {
+        display: block;
+        width: 100%;
+        height: 30px;
+        margin: 0 0 5px 0;
+        background-color: #999999;
     }
   }
 </style>
