@@ -92,7 +92,7 @@
                 localStorage.removeItem('admin');
                 ElMessage.success('已退出登录');
                 listShow.value = false;
-                window.location.reload();
+                router.replace({path: "/login"})
             };
             const showLoginPage = async () => {
                 let localToken = localStorage.getItem('token') || '';

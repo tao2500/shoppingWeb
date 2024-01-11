@@ -61,7 +61,12 @@
                         <el-input v-model="addFrom.name"></el-input>
                     </el-form-item>
                     <el-form-item label="员工职位" prop="duties">
-                        <el-input v-model="addFrom.duties"></el-input>
+                        <el-select v-model="addFrom.duties" placeholder={{addFrom.duties}} :disabled="addFrom.duties === '超级管理员'">
+                            <el-option label="店长" value="店长"></el-option>
+                            <el-option label="药师" value="药师"></el-option>
+                            <el-option label="销售" value="销售"></el-option>
+                            <el-option label="实习生" value="实习生"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="权限密码" prop="password">
                         <el-input v-model="addFrom.password"></el-input>
@@ -84,7 +89,7 @@
     let tableData = ref([{
         id: '123456789',
         name: '张三',
-        duties: "销售",
+        duties: "药师",
         password: "123456",
     }]);
     let searchId = ref('');
@@ -93,14 +98,14 @@
     let addFrom = ref({
         id: '',
         name: '',
-        duties: "",
+        duties: "药师",
         password: "",
     });
     function onAddItem() {
         addFrom.value = {
             id: '',
             name: '',
-            duties: "",
+            duties: "药师",
             password: "",
         };
         isEdit.value = false;

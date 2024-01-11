@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-    import {ref} from "vue";
+    import {onBeforeMount, ref} from "vue";
     import {User, Plus} from "@element-plus/icons-vue";
 
     let activePath = ref('/admin/adminMedicine');
@@ -54,12 +54,20 @@
             id: 5,
             path: 'adminAfterSales',
             authName: '售后管理',
-        },{
-            id: 6,
-            path: 'adminStaff',
-            authName: '员工管理',
         }]
     }]);
+
+    let customer = JSON.parse(localStorage.getItem('customer'));
+    onBeforeMount(() => {
+        if (customer && customer.duties === "超级管理员") {
+            menulist.value[0].children.push({
+                id: 6,
+                path: 'adminStaff',
+                authName: '员工管理',
+            })
+        }
+
+    })
 </script>
 
 <style lang="less" scoped>

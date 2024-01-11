@@ -19,16 +19,21 @@
             <router-link to="/myOrder">
                 　　<span className="">我的订单</span>
             </router-link>
-            <router-link to="/admin/adminMedicine">
+            <router-link v-show="shouAdmin" to="/admin/adminMedicine">
                 　　<span className="">进入后台</span>
             </router-link>
         </div>
     </div>
 </template>
-<script>
-    export default {
-        name: 'Title',
-    }
+<script setup>
+    import {onBeforeMount, ref} from "vue";
+
+
+    let shouAdmin = ref(false);
+    onBeforeMount(() => {
+        let customer = JSON.parse(localStorage.getItem('customer'));
+        if(customer) shouAdmin.value = !!customer.duties;
+    })
 </script>
 <style>
     span {
