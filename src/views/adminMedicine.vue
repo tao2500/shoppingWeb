@@ -39,7 +39,7 @@
             + 新增药品
         </el-button>
         <div class="addMBox">
-            <el-dialog title="添加药品" v-model="showAMB" width="40%" center class="add" :close-on-click-modal="false" :before-close="showAMBClose">
+            <el-dialog :title = 'isEdit ? "维护药品信息" : "新增药品"' v-model="showAMB" width="40%" center class="add" :close-on-click-modal="false" :before-close="showAMBClose">
                 <el-form :model="addFrom" ref="ruleFormRef" :rules="rules" label-width="110px">
                     <el-form-item v-if="!isEdit" label="药品编码" prop="barCode">
                         <el-input v-model="addFrom.barCode"></el-input>
@@ -138,7 +138,7 @@
         imgSrc: string
         barCode: string
         expires: string
-    };
+    }
 
     const rules = reactive<FormRules<RuleForm>>({
         name: [
@@ -180,7 +180,7 @@
 
     let isEdit = ref(false);
     function changeMed (index: number) {
-        addFrom.value = tableData.value[index];
+        addFrom.value = JSON.parse(JSON.stringify(tableData.value[index]));
         isEdit.value = true;
         showAMB.value = true;
         ElMessage.success(index);
