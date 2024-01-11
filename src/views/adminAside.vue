@@ -6,7 +6,7 @@
     <div class="adminAside">
         <el-menu
                 :default-active="activePath"
-                class="el-menu-vertical-demo"
+                class="el-menu-V"
                 text-color="#333333"
                 active-text-color="#2365F3"
                 router
@@ -31,7 +31,7 @@
     import {ref} from "vue";
     import {User, Plus} from "@element-plus/icons-vue";
 
-    let activePath = ref('/activ/');
+    let activePath = ref('/admin/adminMedicine');
 
     const menulist = ref([{
         id: 1,
