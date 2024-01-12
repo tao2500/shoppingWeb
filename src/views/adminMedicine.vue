@@ -220,7 +220,6 @@
         addFrom.value = JSON.parse(JSON.stringify(tableData.value[index]));
         isEdit.value = true;
         showAMB.value = true;
-        ElMessage.success(index);
     }
 
     function deleteMed (index: number) {
