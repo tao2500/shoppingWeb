@@ -6,22 +6,24 @@
 <template>
     <div class="adminStaff">
         <div class="select">
-            <el-input
-                    placeholder="请输入员工号"
-                    prefix-icon="el-icon-search"
-                    size="default"
-                    style="width: 200px"
-                    v-model="searchId"
-                    @keyup.enter.native="getById"
-            ></el-input>
-            <el-button type="primary" size="default" @click="getById">搜索</el-button>
+            <el-checkbox label="展示密码" v-model="showPassword"></el-checkbox>
+            <span>
+                <el-input
+                        placeholder="请输入员工号"
+                        prefix-icon="el-icon-search"
+                        size="default"
+                        style="width: 200px"
+                        v-model="searchId"
+                        @keyup.enter.native="getById"
+                ></el-input>
+                <el-button type="primary" size="default" @click="getById">搜索</el-button>
+            </span>
         </div>
-
         <el-table :data="tableData" style="width: 100%">
             <el-table-column fixed  prop="id" label="员工号"></el-table-column>
             <el-table-column prop="name" label="姓名"></el-table-column>
             <el-table-column prop="duties" label="职务"></el-table-column>
-            <el-table-column prop="password" label="登录密码" width="120"></el-table-column>
+            <el-table-column prop="password" v-if="showPassword" label="登录密码" width="120"></el-table-column>
             <el-table-column fixed="right" label="操作" width="120">
                 <template #default="scope">
                     <el-button
@@ -39,7 +41,7 @@
                             v-show="scope.row.duties !== '超级管理员'"
                             @click="deleteA(scope.$index)"
                     >
-                        删除
+                        注销
                     </el-button>
                 </template>
             </el-table-column>
@@ -109,6 +111,8 @@
     onBeforeMount(() => {
         getAllStaff();
     });
+
+    let showPassword = ref(false);
 
     let searchId = ref('');
     function getById() {
@@ -227,8 +231,10 @@
     overflow: auto;
     .select {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
       margin-bottom: 20px;
+      .el-checkbox {
+      }
       .el-button {
         margin-left: 10px;
       }

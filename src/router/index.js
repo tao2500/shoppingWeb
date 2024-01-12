@@ -71,6 +71,11 @@ const routes = [
             name: 'adminStaff',
             meta: {title: '管理后台-员工'},
             component: () => import('../views/adminStaff.vue'),
+        }, {
+            path: '/admin/adminCustomer',
+            name: 'adminCustomer',
+            meta: {title: '管理后台-顾客'},
+            component: () => import('../views/adminCustomer.vue'),
         }]
     }
 ];

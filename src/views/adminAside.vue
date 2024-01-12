@@ -30,8 +30,9 @@
 <script setup>
     import {onBeforeMount, ref} from "vue";
     import {User, Plus} from "@element-plus/icons-vue";
-
-    let activePath = ref('/admin/adminMedicine');
+    import router from "../router/index.js";
+     // 根据路由判断当前激活的菜单
+    let activePath = ref('/admin/' + router.currentRoute.value.name);
 
     const menulist = ref([{
         id: 1,
@@ -42,10 +43,6 @@
             path: 'adminMedicine',
             authName: '药品管理',
             imgSrc: 'User',
-        },{
-            id: 3,
-            path: 'adminDelivery',
-            authName: '配送管理',
         },{
             id: 4,
             path: 'adminOrder',
@@ -61,9 +58,17 @@
     onBeforeMount(() => {
         if (customer && customer.duties === "超级管理员") {
             menulist.value[0].children.push({
+                id: 3,
+                path: 'adminDelivery',
+                authName: '配送管理',
+            },{
                 id: 6,
                 path: 'adminStaff',
                 authName: '员工管理',
+            },{
+                id: 7,
+                path: 'adminCustomer',
+                authName: '顾客管理',
             })
         }
 
@@ -72,7 +77,7 @@
 
 <style lang="less" scoped>
   .adminAside {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 110px);
     overflow: auto;
   }
 </style>

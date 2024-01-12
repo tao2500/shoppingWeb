@@ -127,3 +127,52 @@ export const delS = params => {
         },
     })
 }
+
+// 会员管理
+export function getAllCustomer() {
+    return request({
+        url: '/customer/selectedAll',
+        method: 'get',
+    })
+}
+
+export const getByCTelephone = params => {
+    return request({
+        url: `/customer/selectedByTelephone`,
+        params,
+        method: 'get'
+    })
+}
+
+export const addC = params => {
+    return request({
+        url: `/customer/addTwo`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+export const editC = params => {
+    return request({
+        url: `/customer/upDate`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+export const delC = params => {
+    return request({
+        url: `/customer/delete`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
