@@ -12,11 +12,12 @@
                     size="default"
                     style="width: 200px"
                     v-model="searchId"
+                    @keyup.enter.native="getById"
             ></el-input>
-            <el-button type="primary" size="default">搜索</el-button>
+            <el-button type="primary" size="default" @click="getById">搜索</el-button>
         </div>
 
-        <el-table :data="tableData" style="width: 100%" max-height="250">
+        <el-table :data="tableData" style="width: 100%">
             <el-table-column fixed  prop="id" label="员工号"></el-table-column>
             <el-table-column prop="name" label="姓名"></el-table-column>
             <el-table-column prop="duties" label="职务"></el-table-column>
@@ -35,6 +36,7 @@
                             link
                             type="primary"
                             size="small"
+                            v-show="scope.row.duties !== '超级管理员'"
                             @click="deleteA(scope.$index)"
                     >
                         删除
@@ -60,6 +62,9 @@
                     <el-form-item label="员工姓名" prop="name">
                         <el-input v-model="addFrom.name"></el-input>
                     </el-form-item>
+                    <el-form-item label="权限密码" prop="password">
+                        <el-input v-model="addFrom.password"></el-input>
+                    </el-form-item>
                     <el-form-item label="员工职位" prop="duties">
                         <el-select v-model="addFrom.duties" placeholder={{addFrom.duties}} :disabled="addFrom.duties === '超级管理员'">
                             <el-option label="店长" value="店长"></el-option>
@@ -67,9 +72,6 @@
                             <el-option label="销售" value="销售"></el-option>
                             <el-option label="实习生" value="实习生"></el-option>
                         </el-select>
-                    </el-form-item>
-                    <el-form-item label="权限密码" prop="password">
-                        <el-input v-model="addFrom.password"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -83,8 +85,9 @@
 </template>
 
 <script setup>
-    import {ref} from "vue";
+    import {onBeforeMount, ref} from "vue";
     import {ElMessage, ElMessageBox} from "element-plus";
+    import {addS, delS, editS, getAllStaffs, getByTelephone} from "../apis/admin/admin.js";
 
     let tableData = ref([{
         id: '123456789',
@@ -92,7 +95,38 @@
         duties: "药师",
         password: "123456",
     }]);
+
+    function getAllStaff() {
+        getAllStaffs().then(res => {
+            if (res.code === "200") {
+                tableData.value = res.items;
+            } else {
+                ElMessage.error('获取所有店员失败!');
+            }
+        })
+    }
+
+    onBeforeMount(() => {
+        getAllStaff();
+    });
+
     let searchId = ref('');
+    function getById() {
+        if (searchId.value === '') {
+            getAllStaff();
+            return;
+        }
+        getByTelephone({
+            telephone: searchId.value
+        }).then(res => {
+            if (res.code === "200") {
+                tableData.value = res.items;
+            } else {
+                ElMessage.error(res.msg);
+            }
+        })
+    }
+
     let isEdit = ref(false);
     let showAB = ref(false);
     let addFrom = ref({
@@ -120,8 +154,16 @@
             cancelButtonText: '取消',
             type: 'warning'
         }).then(() => {
-            tableData.value.splice(index, 1);
-            ElMessage.success('删除成功!');
+            delS(
+                tableData.value[index]
+            ).then(res => {
+                if (res.code === "200") {
+                    ElMessage.success('删除成功!');
+                    getAllStaff();
+                } else {
+                    ElMessage.error('删除失败!');
+                }
+            })
         }).catch(() => {
             console.log('已取消删除');
         });
@@ -155,18 +197,33 @@
     };
 
     function addABOk() {
-        showAB.value = false;
-        tableData.value.push(addFrom.value);
+        addS(addFrom.value).then(res => {
+            if (res.code === "200") {
+                ElMessage.success('添加成功!');
+                getAllStaff();
+                showAB.value = false;
+            } else {
+                ElMessage.error(res.msg);
+            }
+        })
     }
 
     function changeAMBOk() {
-        showAB.value = false;
+        editS(addFrom.value).then(res => {
+            if (res.code === "200") {
+                ElMessage.success('修改成功!');
+                getAllStaff();
+                showAB.value = false;
+            } else {
+                ElMessage.error(res.msg);
+            }
+        })
     }
 </script>
 
 <style lang="less" scoped>
   .adminStaff {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 110px);
     overflow: auto;
     .select {
       display: flex;
@@ -175,6 +232,10 @@
       .el-button {
         margin-left: 10px;
       }
+    }
+    .el-table {
+      max-height: calc(100vh - 180px);
+      overflow: auto;
     }
     .addSBox {
       .add {

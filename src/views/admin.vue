@@ -31,7 +31,7 @@
     overflow: auto;
     .ADHome {
         .el-main {
-          padding: 0 20px;
+          padding: 10px 20px 0 20px;
         }
     }
   }

@@ -78,3 +78,52 @@ export const delO = params => {
         },
     })
 }
+
+// 员工管理
+export function getAllStaffs() {
+    return request({
+        url: '/pharmacist/selectedAll',
+        method: 'get',
+    })
+}
+
+export const getByTelephone = params => {
+    return request({
+        url: `/pharmacist/selectedById`,
+        params,
+        method: 'get'
+    })
+}
+
+export const editS = params => {
+    return request({
+        url: `/pharmacist/upDate`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+export const addS = params => {
+    return request({
+        url: `/pharmacist/addTwo`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+export const delS = params => {
+    return request({
+        url: `/pharmacist/delete`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}

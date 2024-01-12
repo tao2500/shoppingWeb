@@ -10,12 +10,14 @@
             <el-select v-model="searchStatus" placeholder="待发货" @change="selectByStatus">
                 <el-option label="待发货" value="待发货"></el-option>
                 <el-option label="已发货" value="已发货"></el-option>
-                <el-option label="已完成" value="已完成"></el-option>
                 <el-option label="已取消" value="已取消"></el-option>
+                <el-option label="已完成" value="已完成"></el-option>
+                <el-option label="退款中" value="退款中"></el-option>
+                <el-option label="已退款" value="已退款"></el-option>
                 <el-option label="所有状态" value="所有状态"></el-option>
             </el-select>
         </div>
-        <el-table :data="tableData" style="width: 100%" max-height="250">
+        <el-table :data="tableData" style="width: 100%">
             <el-table-column fixed  prop="idOrderFrom" label="订单号"></el-table-column>
             <el-table-column prop="detail" label="内容"></el-table-column>
             <el-table-column prop="shoppingAdd" label="收货信息"></el-table-column>
@@ -71,6 +73,7 @@
         total: '15.22',
         status: '待发货',
         joinTime: '2021-01-01 12:00:00',
+        reasons: '无',
     }])
     let searchStatus = ref('待发货')
 
@@ -104,10 +107,10 @@
                         type: 'success',
                         message: `发货成功`,
                     })
-                    getByStatus();
                 } else {
                     ElMessage.error(res.msg)
                 }
+                getByStatus();
             })
         }).catch(() => {
             console.log('取消发货');
@@ -145,19 +148,18 @@
                 tableData.value = res.items
             })
         } else {
-            getByStatu({
-                status: searchStatus.value
-            }).then(res => {
-                if (res.code !== "200") return ElMessage.error(res.msg)
-                tableData.value = res.items
-            })
+            getByStatus();
         }
     }
 </script>
 
 <style lang="less" scoped>
   .adminOrder {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 110px);
     overflow: auto;
+    .el-table {
+      max-height: calc(100vh - 110px);
+      overflow: auto;
+    }
   }
 </style>
