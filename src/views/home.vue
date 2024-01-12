@@ -55,7 +55,7 @@
             if (res.code === "200"){
                 medic.value = res.items;
             } else {
-                this.$message.error(res.msg);
+                ElMessage.error(res.msg);
             }
         })
     }

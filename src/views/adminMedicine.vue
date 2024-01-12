@@ -5,7 +5,7 @@
 -->
 <template>
     <div class="adminMedicine">
-        <el-table :data="tableData" style="width: 100%" max-height="250">
+        <el-table :data="tableData" style="width: 100%">
             <el-table-column fixed  prop="name" label="药品"></el-table-column>
             <el-table-column prop="size" label="规格"></el-table-column>
             <el-table-column prop="type" label="类型"></el-table-column>
@@ -75,7 +75,7 @@
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="showAMBClose">取 消</el-button>
                     <el-button type="primary" v-if="!isEdit" @click="addAMBOk">上 架</el-button>
-                    <el-button type="primary" v-else @click="addAMBOk">保 存</el-button>
+                    <el-button type="primary" v-else @click="editClick">保 存</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -83,10 +83,11 @@
 </template>
 
 <script lang="ts" setup>
-    import {reactive, ref} from "vue";
+    import {onBeforeMount, reactive, ref} from "vue";
     import type { FormInstance, FormRules } from 'element-plus'
     import { ElMessageBox } from 'element-plus'
     import {ElMessage} from "element-plus";
+    import { getAllDrugs, editM, addM, delM } from "../apis/admin/admin.js";
 
     let tableData = ref([{
         barCode: '123456789',
@@ -99,6 +100,20 @@
         price: '23.00',
         expires: '2025',
     }]);
+
+    onBeforeMount(() => {
+        getAllDrug();
+    })
+
+    function getAllDrug() {
+        getAllDrugs().then(res => {
+            if (res.code === "200"){
+                tableData.value = res.items;
+            } else {
+                ElMessage.error(res.msg);
+            }
+        })
+    }
 
     let addFrom = ref({
         barCode: '',
@@ -173,8 +188,30 @@
     function showAMBClose () {
         showAMB.value = false;
     }
+
     function addAMBOk () {
-        console.log(addFrom.value);
+        addM(
+            addFrom.value
+        ).then(res => {
+            if (res.code === "200"){
+                ElMessage.success(res.msg);
+                getAllDrug();
+            } else {
+                ElMessage.error(res.msg);
+            }
+        })
+        showAMB.value = false;
+    }
+
+    function editClick () {
+        editM(addFrom.value).then(res => {
+            if (res.code === "200"){
+                ElMessage.success(res.msg);
+                getAllDrug();
+            } else {
+                ElMessage.error(res.msg);
+            }
+        })
         showAMB.value = false;
     }
 
@@ -196,12 +233,19 @@
                 type: 'warning',
             }
         ).then(() => {
-            ElMessage.success('已下架');
+            delM(
+                tableData.value[index]
+            ).then(res => {
+                if (res.code === "200"){
+                    ElMessage.success(res.msg);
+                    getAllDrug();
+                } else {
+                    ElMessage.error(res.msg);
+                }
+            })
         }).catch(() => {
-            ElMessage.info('已取消删除');
+            console.log('已取消下架');
         });
-
-
     }
 </script>
 
@@ -209,6 +253,10 @@
   .adminMedicine {
     height: calc(100vh - 100px);
     overflow: auto;
+    .el-table {
+      max-height: calc(100vh - 130px);
+      overflow: auto;
+    }
     .addMBox {
       .add {
         .dialog-footer {

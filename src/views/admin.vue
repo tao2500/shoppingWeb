@@ -30,7 +30,9 @@
     height: calc(100vh - 100px);
     overflow: auto;
     .ADHome {
-
+        .el-main {
+          padding: 0 20px;
+        }
     }
   }
 </style>
