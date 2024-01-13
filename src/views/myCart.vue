@@ -64,6 +64,7 @@
     overflow: auto;
     .el-table {
       left: 10%;
+      z-index: 0;
     }
     .MCFoot {
       height: 60px;

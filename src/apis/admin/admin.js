@@ -176,3 +176,44 @@ export const delC = params => {
         },
     })
 }
+
+// 运费管理
+export function getAllFreight() {
+    return request({
+        url: '/freight/selectedAll',
+        method: 'get',
+    })
+}
+
+export function addD (params) {
+    return request({
+        url: `/freight/addTwo`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+export const editD = params => {
+    return request({
+        url: `/freight/upDataFreight`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+export const delD = params => {
+    return request({
+        url: `/freight/deleteFreight`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}

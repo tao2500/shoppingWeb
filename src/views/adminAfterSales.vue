@@ -131,6 +131,7 @@
     .el-table {
       max-height: calc(100vh - 110px);
       overflow: auto;
+      z-index: 0;
     }
   }
 </style>

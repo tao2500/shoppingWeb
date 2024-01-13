@@ -219,11 +219,15 @@
     .adminCustomer {
       height: calc(100vh - 110px);
       overflow: auto;
+      .el-table {
+        z-index: 0;
+      }
       .select {
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
         .el-checkbox {
+          z-index: 0;
         }
         .el-button {
           margin-left: 10px;

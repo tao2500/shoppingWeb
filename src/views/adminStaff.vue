@@ -234,6 +234,7 @@
       justify-content: space-between;
       margin-bottom: 20px;
       .el-checkbox {
+        z-index: 0;
       }
       .el-button {
         margin-left: 10px;
@@ -242,6 +243,7 @@
     .el-table {
       max-height: calc(100vh - 180px);
       overflow: auto;
+      z-index: 0;
     }
     .addSBox {
       .add {

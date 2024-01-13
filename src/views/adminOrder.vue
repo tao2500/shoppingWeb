@@ -30,9 +30,19 @@
                             link
                             type="primary"
                             size="small"
-                            @click="deleteOrder(scope.$index)"
+                            v-if="scope.row.status !== '已取消'"
+                            @click="cancellation(scope.$index)"
                     >
                         取消订单
+                    </el-button>
+                    <el-button
+                            link
+                            type="primary"
+                            size="small"
+                            v-if="scope.row.status === '已取消'"
+                            @click="deleteOrder(scope.$index)"
+                    >
+                        删除订单
                     </el-button>
                     <el-button
                             link
@@ -118,23 +128,48 @@
     }
 
     function deleteOrder(index) {
+        ElMessageBox.confirm('该订单将彻底删除，是否继续？' , '提示', {
+            confirmButtonText: '确 定',
+            cancelButtonText: '取 消',
+            type: 'warning'
+        }).then(() => {
+            delO(
+                tableData.value[index]
+            ).then(res => {
+                if (res.code === "200"){
+                    ElMessage({
+                        type: 'success',
+                        message: `删除成功`,
+                    })
+                } else {
+                    ElMessage.error(res.msg)
+                }
+                getByStatus();
+            })
+        }).catch(() => {
+            console.log('取消删除');
+        })
+    }
+
+    function cancellation(index) {
         ElMessageBox.confirm('请先电话告知顾客退单原因，资金将在1-3个工作日内原路退回顾客账户' , '提示', {
             confirmButtonText: '确 定',
             cancelButtonText: '取 消',
             type: 'warning'
         }).then(() => {
-            delO({
-                idOrderFrom: tableData.value[index].idOrderFrom
-            }).then(res => {
+            tableData.value[index].status = "已取消"
+            sendO(
+                tableData.value[index]
+            ).then(res => {
                 if (res.code === "200"){
                     ElMessage({
                         type: 'success',
                         message: `退单成功`,
                     })
-                    getByStatus();
                 } else {
                     ElMessage.error(res.msg)
                 }
+                getByStatus();
             })
         }).catch(() => {
             console.log('取消退单');
@@ -160,6 +195,7 @@
     .el-table {
       max-height: calc(100vh - 110px);
       overflow: auto;
+      z-index: 0;
     }
   }
 </style>

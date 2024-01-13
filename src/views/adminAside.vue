@@ -60,7 +60,7 @@
             menulist.value[0].children.push({
                 id: 3,
                 path: 'adminDelivery',
-                authName: '配送管理',
+                authName: '运费管理',
             },{
                 id: 6,
                 path: 'adminStaff',

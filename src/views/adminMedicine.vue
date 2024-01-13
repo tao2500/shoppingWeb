@@ -255,6 +255,7 @@
     .el-table {
       max-height: calc(100vh - 140px);
       overflow: auto;
+      z-index: 0;
     }
     .addMBox {
       .add {
