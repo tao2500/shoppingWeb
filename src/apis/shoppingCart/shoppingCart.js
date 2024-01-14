@@ -28,8 +28,13 @@ export   function changeCount(params) {
 
 
 // myCart
-export   function getMyCart(params) {
+export function getMyCart(params) {
     return request({
-
+        url: '/shoppingCart/getMyShoppingCart',
+        method: 'post',
+        params,
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 }
