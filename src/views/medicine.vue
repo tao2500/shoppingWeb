@@ -9,20 +9,25 @@
         <p>{{medic.name}} - {{medic.size}}</p>
         <p>库存：{{medic.count}} </p>
         <p>
-            {{medic.price}} 元<button v-show="count <= 0" class="addCartBut" @click="addCart('addOne')">加入购物车</button>
-            <span class="addSub" v-show="count > 0">
+            {{medic.price}} 元<button v-show="cart.count <= 0 && cart.count !== ''" class="addCartBut" @click="addCart('addOne')">加入购物车</button>
+            <span class="addSub" v-if="cart.count > 0 || cart.count === ''" @drop="deleteCart">
                 <RemoveFilled class="BTH" @click="addCart('sub')"></RemoveFilled>
-                <span class="count"><input type="number" v-model="count"/></span>
+                <span class="count"><input type="number" v-model="cart.count"/></span>
                 <CirclePlusFilled class="BTH" @click="addCart('add')"></CirclePlusFilled>
             </span>
         </p>
     </el-card>
-
 </template>
 
 <script setup>
-    import {ref, toRefs} from "vue";
+    import {onBeforeMount, ref, toRefs, watch} from "vue";
     import { CirclePlusFilled, RemoveFilled } from  "@element-plus/icons-vue";
+    import {
+        addShoppingCart,
+        changeCount,
+        deleteShoppingCart,
+    } from '../apis/shoppingCart/shoppingCart.js';
+    import {ElMessage} from "element-plus";
 
 
     const props = defineProps({
@@ -30,17 +35,66 @@
     })
     const {medic} =toRefs(props)
 
-    let count = ref(0);
+    let cart = ref({
+        id: 1,
+        customerId: 1,
+        barCode:  1,
+        count: 0,
+        status: "有效",
+        joinTime: "2024-01-08"
+    })
+
+    onBeforeMount(() => {
+        cart.value.joinTime =  new Date().toLocaleString()
+        cart.value.customerId = JSON.parse(localStorage.getItem("customer")).id
+        cart.value.barCode = medic.value.barCode
+    })
+
     function addCart(msg) {
         if (msg === 'addOne'){
-            count.value = 1;
+            cart.value.count = 1;
+            addShoppingCart(cart.value).then((res) => {
+                if (res.code !== "200") {
+                    ElMessage.error(res.msg)
+                }
+            })
         } else if (msg === 'add'){
-            count.value++;
-        } else if(count.value > 0){
-            count.value--;
+            cart.value.count++;
+        } else if(cart.value.count > 0){
+            cart.value.count--;
         }
     }
 
+    function deleteCart() {
+        deleteShoppingCart(cart.value).then((res) => {
+            if (res.code !== "200") {
+                ElMessage.error(res.msg)
+            }
+        })
+    }
+
+    function undateCart() {
+        changeCount(cart.value).then((res) => {
+            if (res.code !== "200") {
+                ElMessage.error(res.msg)
+            }
+        })
+    }
+
+    let oVal = ref(0)
+    watch(cart.value, (newValue, oldValue) => {
+        if (newValue.count > medic.value.count) {
+            ElMessage.error("库存不足")
+            cart.value.count = medic.value.count
+        }
+        if(cart.value.count <= 0 && oVal.value > 0) {
+            deleteCart()
+        }
+        if(cart.value.count >= 1 && oVal.value >= 1) {
+            undateCart()
+        }
+        oVal.value = cart.value.count
+    })
 </script>
 
 <style lang="less" scoped>

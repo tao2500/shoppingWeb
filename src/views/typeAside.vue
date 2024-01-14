@@ -33,6 +33,7 @@
         getAllType().then(res => {
             if (res.code === "200"){
                 allType.value = res.items;
+                getDrugsByType(allType.value[0]);
             } else {
                 this.$message.error(res.msg);
             }

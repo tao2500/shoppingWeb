@@ -26,10 +26,15 @@
     import {ref} from "vue";
 
     let medic = ref([{
-        img: '../assets/img/homeHead/wang.jpg',
+        barCode: '1234567890123456789',
+        imgSrc: '../assets/img/homeHead/wang.jpg',
         name: '阿莫西林',
-        price: 10,
+        type: '西药',
+        effect: '用于感冒引起的头痛、发热、鼻塞、流涕、咳嗽等',
         count: 99,
+        size: '100mg*10片',
+        price: 10,
+        expires: '2024-01-01'
     }]);
 
     function getDrugsByType(data) {

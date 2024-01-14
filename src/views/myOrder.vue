@@ -23,15 +23,18 @@
                     <span class="statu">
                         <br/>
                         订单状态：{{t.status}}
-                        <p>申请售后</p>
+                        <p @click="afterSalesClick">申请售后</p>
                     </span>
                     <span class="sumPri">
                         <br/>
                         订单总价：{{t.total}}
-                        <P>查看物流</P>
+                        <P @click="showLogistics">查看物流</P>
                     </span>
                 </div>
             </el-card>
+        </div>
+        <div>
+            
         </div>
     </div>
     <Foot></Foot>
@@ -51,6 +54,14 @@
         status: "已支付",
         joinTime: '2024-01-10 00:00:00',
     }])
+
+    function  afterSalesClick() {
+        console.log("申请售后")
+    }
+
+    function showLogistics() {
+        console.log("查看物流")
+    }
 </script>
 
 <style lang="less" scoped>
