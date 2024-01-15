@@ -1,3 +1,8 @@
+<!--
+ * @author: 2500594037@qq.com
+ * @since: 2024-01-15
+ * @description: 支付页
+-->
 <template>
     <div class="settlementBox">
         <el-dialog title = "支付订单" v-model="orderMsg.show" width="40%" center class="play" :close-on-click-modal="false" :before-close="showACClose">
@@ -184,7 +189,6 @@
 
 <style lang="less" scoped>
   .settlementBox{
-    height: calc(100vh - 100px);
     .play {
       li {
         margin: 5px 0 20px 0;

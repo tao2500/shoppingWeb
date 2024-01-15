@@ -35,6 +35,25 @@
             <el-button type="primary" size="mini" @click="showSBClick">结算</el-button>
         </div>
     </div>
+    <div class="setAddress">
+        <el-dialog v-model="showAddress" class="dial" title="确认地址" width="30%">
+            <el-form :model="shoppingAdd" label-width="120px">
+                <el-form-item label="收货人">
+                    <el-input v-model="shoppingAdd.name" placeholder="请输入收货人姓名"></el-input>
+                </el-form-item>
+                <el-form-item label="联系方式">
+                    <el-input v-model="shoppingAdd.telephone" placeholder="请输入手机号码"></el-input>
+                </el-form-item>
+                <el-form-item label="收货地址">
+                    <el-input v-model="shoppingAdd.address" placeholder="请输入收货地址"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="showAddress = false">取 消</el-button>
+                <el-button type="primary" @click="goPlay">支 付</el-button>
+            </div>
+        </el-dialog>
+    </div>
     <div>
         <PlayOrder :orderMsg="orderMsg" @playOk="playOk"></PlayOrder>
     </div>
@@ -91,7 +110,11 @@
     }
 
     onBeforeMount(() =>{
-        cId.value = JSON.parse(localStorage.getItem("customer")).id
+        let customer = JSON.parse(localStorage.getItem("customer"));
+        cId.value = customer.id;
+        shoppingAdd.value.name = customer.name;
+        shoppingAdd.value.telephone = customer.telephone;
+        shoppingAdd.value.address = customer.address;
         getCart();
         getSummary()
     })
@@ -124,15 +147,27 @@
             return
         }
         // 依据所选药品创建订单，状态为待支付
+
         // 购物车删除已结算商品
+        //  跳转支付页面
+        showAddress.value = true
+    }
+
+    let showAddress = ref(false);
+    let shoppingAdd = ref({
+        name: "",
+        telephone: "",
+        address: ""
+    });
+    function goPlay() {
         orderMsg.value.show = true
+        showAddress.value = false
     }
 
     function playOk (data) {
         orderMsg.value = data
     }
 
-    let shoppingAdd = ref("");
 </script>
 
 <style lang="less" scoped>
@@ -159,6 +194,13 @@
       }
       .el-button {
         margin: 13px 46px 0 0;
+      }
+    }
+  }
+  .setAddress {
+    .dial {
+      .dialog-footer {
+        text-align: right;
       }
     }
   }
