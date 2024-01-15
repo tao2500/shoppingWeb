@@ -1,6 +1,6 @@
 <template>
     <div class="settlementBox">
-        <el-dialog title = "支付订单" width="40%" center class="play" :close-on-click-modal="false" :before-close="showACClose">
+        <el-dialog title = "支付订单" v-model="orderMsg.show" width="40%" center class="play" :close-on-click-modal="false" :before-close="showACClose">
             <ul class="type">
                 <li data-selectType="/online">
                     <el-radio-group v-model="chargePlayType" size="large" @change="selectType">
@@ -151,9 +151,13 @@
         }, 2000)
     }
 
+    const emit = defineEmits(['play-ok'])
     function playOK() {
         // 订单状态更改为待发货
         // 更新购物车
+        // 关闭支付页
+        orderMsg.value.show = false;
+        emit('playOk', orderMsg.value)
     }
 
     const copyMsg = () => {
