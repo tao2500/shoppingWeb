@@ -48,6 +48,13 @@
                     <el-input v-model="shoppingAdd.address" placeholder="请输入收货地址"></el-input>
                 </el-form-item>
             </el-form>
+            <span class="selectDelivery">
+                配送方式
+                <el-radio-group v-model="shoppingAdd.delivery" size="large">
+                    <el-radio-button label="快递发货">快递发货</el-radio-button>
+                    <el-radio-button label="同城闪送">同城闪送</el-radio-button>
+                </el-radio-group>
+            </span>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="showAddress = false">取 消</el-button>
                 <el-button type="primary" @click="goPlay">支 付</el-button>
@@ -67,6 +74,7 @@
     import {onBeforeMount, ref} from "vue";
     import {deleteShoppingCart, getMyCart} from "../apis/shoppingCart/shoppingCart.js";
     import {ElLoading, ElMessage} from "element-plus";
+    import {addOrderFroms} from "../apis/orderFrom/orderFrom.js";
 
     let tableData = ref([{
         id: 1,
@@ -147,7 +155,13 @@
             return
         }
         // 依据所选药品创建订单，状态为待支付
-
+        addOrderFroms(multipleSelection.value).then(res => {
+            if(res.code !== "200") {
+                ElMessage.error(res.msg)
+            } else {
+                ElMessage.success(res.msg);
+            }
+        })
         // 购物车删除已结算商品
         //  跳转支付页面
         showAddress.value = true
@@ -157,7 +171,8 @@
     let shoppingAdd = ref({
         name: "",
         telephone: "",
-        address: ""
+        address: "",
+        delivery: "快递发货"
     });
     function goPlay() {
         orderMsg.value.show = true
@@ -201,6 +216,9 @@
     .dial {
       .dialog-footer {
         text-align: right;
+      }
+      .selectDelivery {
+        margin: 0 0 10px 10%;
       }
     }
   }
