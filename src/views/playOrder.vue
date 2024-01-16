@@ -84,6 +84,7 @@
     import {ElLoading, ElMessage} from "element-plus";
     import QRCode from "qrcodejs2-fix";
     import Clipboard from "clipboard";
+    import {playOKK} from "../apis/orderFrom/orderFrom.js";
 
     const props = defineProps({
         orderMsg: Object,
@@ -159,15 +160,19 @@
     const emit = defineEmits(['play-ok'])
     function playOK() {
         // 订单状态更改为待发货
-        // 更新购物车
+        playOKK({
+            idOrderFrom: orderMsg.value.orderId
+        }).then((res) => {
+            if (res.code !== "200") {
+                ElMessage.error("支付成功，但更新订单状态失败，请联系工作人员");
+            }
+        })
         // 关闭支付页
         orderMsg.value.show = false;
         emit('playOk', orderMsg.value)
     }
 
     function playNO() {
-        // 订单状态更改为待发货
-        // 更新购物车
         // 关闭支付页
         orderMsg.value.show = false;
         emit('playNO', orderMsg.value)

@@ -75,6 +75,7 @@
     import {deleteShoppingCart, getMyCart} from "../apis/shoppingCart/shoppingCart.js";
     import {ElLoading, ElMessage} from "element-plus";
     import {addOrderFroms} from "../apis/orderFrom/orderFrom.js";
+    import {sendO} from "../apis/admin/admin.js";
 
     let tableData = ref([{
         id: 1,
@@ -165,7 +166,7 @@
     function goPlay() {
         // 传输收获地址及方式
         multipleSelection.value[0].address = shoppingAdd.value.name + ',' + shoppingAdd.value.telephone + ',' + shoppingAdd.value.address + ',' + shoppingAdd.value.delivery;
-        // 依据所选药品创建订单，状态为待支付
+        // 依据所选药品创建订单，状态为待支付，返回数据库生成的订单号，用于支付页修改订单状态
         addOrderFroms(
             multipleSelection.value
         ).then(res => {
@@ -173,6 +174,7 @@
                 ElMessage.error(res.msg)
             } else {
                 ElMessage.success(res.msg);
+                orderMsg.value.orderId = res.items[0].idOrderFrom
             }
         })
         // 跳转支付页
@@ -182,9 +184,9 @@
 
     function playOk (data) {
         orderMsg.value = data
-        // 后台清除购物车已结算药品
-        // 更新购物车
+        // 后台清除购物车已结算药品, 更新购物车
         getCart();
+        // 订单状态设置为已支付
     }
     function playNo () {
         orderMsg.value.show = false

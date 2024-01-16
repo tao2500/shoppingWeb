@@ -33,9 +33,6 @@
                 </div>
             </el-card>
         </div>
-        <div>
-            
-        </div>
     </div>
     <Foot></Foot>
 </template>
@@ -43,7 +40,8 @@
 <script setup>
     import Head from "./head.vue";
     import Foot from "./foot.vue";
-    import {ref} from "vue";
+    import {onBeforeMount, ref} from "vue";
+    import {getMyOrderFromList} from "../apis/orderFrom/orderFrom.js";
 
     let tableData = ref([{
         idOrderFrom: 1,
@@ -54,6 +52,24 @@
         status: "已支付",
         joinTime: '2024-01-10 00:00:00',
     }])
+
+    const customerId = ref(1);
+    function getMyOrder() {
+        getMyOrderFromList({
+            customerId: customerId.value
+        }).then((res) => {
+            if (res.code === "200") {
+                tableData.value = res.items;
+            } else {
+                console.log(res.msg);
+            }
+        })
+    }
+
+    onBeforeMount(() => {
+        customerId.value = JSON.parse(localStorage.getItem("customer")).id;
+        getMyOrder();
+    })
 
     function  afterSalesClick() {
         console.log("申请售后")
