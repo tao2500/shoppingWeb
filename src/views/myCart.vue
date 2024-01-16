@@ -62,7 +62,7 @@
         </el-dialog>
     </div>
     <div>
-        <PlayOrder :orderMsg="orderMsg" @playOk="playOk"></PlayOrder>
+        <PlayOrder :orderMsg="orderMsg" @playOk="playOk" @playNO="playNo"></PlayOrder>
     </div>
     <Foot></Foot>
 </template>
@@ -104,17 +104,15 @@
                 ElMessage.error(res.msg)
             } else {
                 tableData.value = res.items
+                getSummary()
             }
         })
     }
 
     function getSummary () {
-        setTimeout(() =>{
-            tableData.value.forEach(item => {
-                item.summary = Math.ceil(item.price * item.count *100) / 100
-            })
-        }, 1000)
-
+        tableData.value.forEach(item => {
+            item.summary = Math.ceil(item.price * item.count *100) / 100
+        })
     }
 
     onBeforeMount(() =>{
@@ -124,7 +122,6 @@
         shoppingAdd.value.telephone = customer.telephone;
         shoppingAdd.value.address = customer.address;
         getCart();
-        getSummary()
     })
 
     function getPlayMany () {
@@ -154,16 +151,7 @@
             ElMessage.error("请选择待结算药品")
             return
         }
-        // 依据所选药品创建订单，状态为待支付
-        addOrderFroms(multipleSelection.value).then(res => {
-            if(res.code !== "200") {
-                ElMessage.error(res.msg)
-            } else {
-                ElMessage.success(res.msg);
-            }
-        })
-        // 购物车删除已结算商品
-        //  跳转支付页面
+        //  跳转确认收货地址页
         showAddress.value = true
     }
 
@@ -175,12 +163,35 @@
         delivery: "快递发货"
     });
     function goPlay() {
+        // 传输收获地址及方式
+        multipleSelection.value[0].address = shoppingAdd.value.name + ',' + shoppingAdd.value.telephone + ',' + shoppingAdd.value.address + ',' + shoppingAdd.value.delivery;
+        // 依据所选药品创建订单，状态为待支付
+        addOrderFroms(
+            multipleSelection.value
+        ).then(res => {
+            if(res.code !== "200") {
+                ElMessage.error(res.msg)
+            } else {
+                ElMessage.success(res.msg);
+            }
+        })
+        // 跳转支付页
         orderMsg.value.show = true
         showAddress.value = false
     }
 
     function playOk (data) {
         orderMsg.value = data
+        // 后台清除购物车已结算药品
+        // 更新购物车
+        getCart();
+    }
+    function playNo () {
+        orderMsg.value.show = false
+        ElMessage.success("已取消支付")
+        // 后台清除购物车已结算药品
+        // 更新购物车
+        getCart();
     }
 
 </script>

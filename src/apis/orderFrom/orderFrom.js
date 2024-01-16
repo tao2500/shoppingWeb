@@ -4,6 +4,10 @@ export  function addOrderFroms(params) {
     return request ({
         url: '/orderFrom/addOrderFrom',
         method: 'post',
-        data: params
+        data:params,
+        headers: {
+            'Content-Type': 'application/json' // 设置请求头的类型为JSON
+            // 'Content-Type': 'application/x-www-form-urlencoded'
+        }
     })
 }

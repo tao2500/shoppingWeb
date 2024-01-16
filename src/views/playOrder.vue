@@ -5,7 +5,7 @@
 -->
 <template>
     <div class="settlementBox">
-        <el-dialog title = "支付订单" v-model="orderMsg.show" width="40%" center class="play" :close-on-click-modal="false" :before-close="showACClose">
+        <el-dialog title = "支付订单" v-model="orderMsg.show" width="40%" center class="play" :close-on-click-modal="false" :before-close="playNO">
             <ul class="type">
                 <li data-selectType="/online">
                     <el-radio-group v-model="chargePlayType" size="large" @change="selectType">
@@ -163,6 +163,14 @@
         // 关闭支付页
         orderMsg.value.show = false;
         emit('playOk', orderMsg.value)
+    }
+
+    function playNO() {
+        // 订单状态更改为待发货
+        // 更新购物车
+        // 关闭支付页
+        orderMsg.value.show = false;
+        emit('playNO', orderMsg.value)
     }
 
     const copyMsg = () => {
