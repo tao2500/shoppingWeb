@@ -126,7 +126,8 @@
     })
 
     function getPlayMany () {
-        orderMsg.value.playMeny = multipleSelection.value.reduce((sum, item) => sum + item.summary, 0)
+        // 计算总金额，保留两位小数
+        orderMsg.value.playMeny = Math.ceil(multipleSelection.value.reduce((sum, item) => sum + item.summary , 0) * 100) / 100;
     }
 
 

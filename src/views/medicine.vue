@@ -99,12 +99,14 @@
 
 <style lang="less" scoped>
   .medicineBox {
+    min-width: 200px;
     width: 12vw;
     p {
       font-size: 14px;
         margin: 0;
     }
     img{
+      min-width: 163px;
       width: 10vw;
     }
     .addCartBut {
