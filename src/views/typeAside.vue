@@ -6,7 +6,7 @@
 <template>
     <div class="TA">
         <div class="TBBox">
-            <el-button class="typeBut" v-for="t of allType" type="primary" size="small" @click="getDrugsByType(t)" >{{t}}</el-button>
+            <el-button class="typeBut" v-for="t of allType" :key="t" type="primary" size="small" @click="getDrugsByType(t)" >{{t}}</el-button>
         </div>
         <div>
             <ArrowDownBold class="showAll" @click="showDrawer = true"></ArrowDownBold>
@@ -61,7 +61,7 @@
     margin-top: 30%;
     .TBBox {
       width: 50%;
-      height: calc(70vh - 120px);
+      height: calc(70vh - 110px);
       border: #999999 solid 2px;
       border-radius: 5px;
       overflow: hidden;

@@ -7,7 +7,7 @@
     <Head></Head>
     <el-container class="TB">
         <el-main>
-            <div class="showMedicine" v-for="m of medic">
+            <div class="showMedicine" v-for="m of medic" :key="m.barCode">
                 <medicine class="med" :medic="m"></medicine>
             </div>
         </el-main>
@@ -25,19 +25,21 @@
     import typeAside from "./typeAside.vue";
     import {ref} from "vue";
 
-    let medic = ref([{
-        barCode: '1234567890123456789',
-        imgSrc: '../assets/img/homeHead/wang.jpg',
-        name: '阿莫西林',
-        type: '西药',
-        effect: '用于感冒引起的头痛、发热、鼻塞、流涕、咳嗽等',
-        count: 99,
-        size: '100mg*10片',
-        price: 10,
-        expires: '2024-01-01'
-    }]);
+    // let medic = ref([{
+    //     barCode: '1234567890123456789',
+    //     imgSrc: '../assets/img/homeHead/wang.jpg',
+    //     name: '阿莫西林',
+    //     type: '西药',
+    //     effect: '用于感冒引起的头痛、发热、鼻塞、流涕、咳嗽等',
+    //     count: 99,
+    //     size: '100mg*10片',
+    //     price: 10,
+    //     expires: '2024-01-01'
+    // }]);
+    let medic = ref([]);
 
     function getDrugsByType(data) {
+        medic.value = [];
         medic.value = data;
     }
 </script>

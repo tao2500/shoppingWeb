@@ -220,6 +220,7 @@
       height: calc(100vh - 110px);
       overflow: auto;
       .el-table {
+        max-height: calc(100vh - 180px);
         z-index: 0;
       }
       .select {

@@ -15,7 +15,7 @@
                 <el-button type="primary" size="small" @click="getAllDrug">浏览所有药品</el-button>
             </span>
         </div>
-        <div class="showMedicine" v-for="m of medic">
+        <div class="showMedicine" v-for="m of medic" :key="m.barCode">
             <medicine class="med" :medic="m"></medicine>
         </div>
     </div>
