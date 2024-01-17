@@ -165,17 +165,18 @@
         }).then((res) => {
             if (res.code !== "200") {
                 ElMessage.error("支付成功，但更新订单状态失败，请联系工作人员");
+            } else {
+                emit('playOk', orderMsg.value)
+                // 关闭支付页
+                orderMsg.value.show = false;
             }
         })
-        // 关闭支付页
-        orderMsg.value.show = false;
-        emit('playOk', orderMsg.value)
     }
 
     function playNO() {
+        emit('playNO', orderMsg.value)
         // 关闭支付页
         orderMsg.value.show = false;
-        emit('playNO', orderMsg.value)
     }
 
     const copyMsg = () => {

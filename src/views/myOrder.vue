@@ -27,6 +27,7 @@
                             <div @click="cencellationOrder(t)" v-if="t.status === '待支付' || t.status === '待发货'" class="myBth">取消订单</div>
                             <div @click="goAfterSalesTab(t)" v-else-if="t.status !== '退款中' && t.status !== '已退款' && t.status !== '已取消'" class="myBth">申请售后</div>
                             <div @click="confirmReceipt(t)" v-if="t.status === '已发货'" class="myBth">确认收货</div>
+                            <div @click="goPlay(t)" v-if="t.status === '待支付'" class="myBth">支付订单</div>
                         </div>
                     </span>
                     <span class="sumPri">
@@ -68,6 +69,9 @@
                 </template>
             </el-dialog>
         </div>
+        <div>
+            <PlayOrder :orderMsg="orderMsg" @playOk="playOk" @playNO="playNo"></PlayOrder>
+        </div>
     </div>
     <Foot></Foot>
 </template>
@@ -75,6 +79,7 @@
 <script setup>
     import Head from "./head.vue";
     import Foot from "./foot.vue";
+    import PlayOrder from "./playOrder.vue";
     import {onBeforeMount, ref} from "vue";
     import {
         deleteOrderFrom,
@@ -104,6 +109,10 @@
         }).then((res) => {
             if (res.code === "200") {
                 tableData.value = res.items;
+                // 订单按时间顺序排列
+                tableData.value.sort((a, b) => {
+                    return new Date(b.joinTime).getTime() - new Date(a.joinTime).getTime()
+                })
             } else {
                 console.log(res.msg);
             }
@@ -120,7 +129,7 @@
     }
 
     function addLogisticsMsg (t) {
-        showLogisticsBoxData.value.push(t.joinTime  + " | 商品已下单,等待买家支付")
+        showLogisticsBoxData.value.push("商品已下单,等待买家支付 | " + t.joinTime)
         if (t.status === "待支付") return;
         if (t.status === "已取消") {
             showLogisticsBoxData.value.unshift("订单已取消");
@@ -257,6 +266,26 @@
         }).catch(() => {
             console.log("取消 取消订单操作")
         })
+    }
+
+    let orderMsg = ref({
+        playMeny: 0,
+        orderId: 0,
+        show: false
+    })
+    // 支付订单
+    function goPlay(t) {
+        orderMsg.value.playMeny = t.total;
+        orderMsg.value.orderId = t.idOrderFrom;
+        orderMsg.value.show = true;
+    }
+    function playOk (data) {
+        orderMsg.value = data
+        getMyOrder()
+    }
+    function playNo () {
+        orderMsg.value.show = false
+        getMyOrder()
     }
 </script>
 
