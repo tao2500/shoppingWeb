@@ -8,6 +8,7 @@
         <div>
             订单状态：
             <el-select v-model="searchStatus" placeholder="待发货" @change="selectByStatus">
+                <el-option label="待支付" value="待支付"></el-option>
                 <el-option label="待发货" value="待发货"></el-option>
                 <el-option label="已发货" value="已发货"></el-option>
                 <el-option label="已取消" value="已取消"></el-option>

@@ -31,8 +31,8 @@
                 </div>
             </div>
         </el-header>
-        <el-dialog title="编辑资料" v-model="editMsgBox" width="30%" center class="charge" :close-on-click-modal="false" :before-close="editClose">
-            <el-form :model="editMsg" ref="form" label-width="80px">
+        <el-dialog title="编辑资料" v-model="editMsgBox" width="35%" center class="charge" :close-on-click-modal="false" :before-close="editClose">
+            <el-form :model="editMsg" ref="form" label-width="70px">
                 <el-form-item label="姓名" prop="name">
                     <el-input v-model="editMsg.name"></el-input>
                 </el-form-item>
@@ -270,7 +270,7 @@
           margin-top: 20px;
         }
         .upDataMsg {
-          color: #333333;
+          color: #2365F3;
           margin: 10px 0 -20px 0;
         }
         .logOutBoxLine{
