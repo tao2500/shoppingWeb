@@ -18,7 +18,7 @@ export  function deleteShoppingCart(params) {
     })
 }
 
-export   function changeCount(params) {
+export function changeCount(params) {
     return request({
         url: '/shoppingCart/changeCount',
         method: 'post',
@@ -35,6 +35,18 @@ export function getMyCart(params) {
         params,
         headers: {
             'Content-Type': 'application/json'
+        }
+    })
+}
+
+export function getDrugByBarCode(params) {
+    return request({
+        url: '/shoppingCart/selectedDrugByBarCode',
+        method: 'post',
+        data: params,
+        headers: {
+            // 'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     })
 }

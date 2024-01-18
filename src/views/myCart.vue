@@ -17,7 +17,11 @@
                 <template #default="scope">{{ scope.row.name}}</template>
             </el-table-column>
             <el-table-column property="price" label="单价" width="160"></el-table-column>
-            <el-table-column property="count" label="数量" width="160"></el-table-column>
+            <el-table-column property="count" label="数量" width="200">
+                <template #default="scope">
+                    <el-input-number v-model="scope.row.count" :min="1" :max="buyMaxCount" @change="changeC(scope.row)" label="数量"></el-input-number>
+                </template>
+            </el-table-column>
             <el-table-column property="summary" label="小计" width="160"></el-table-column>
             <el-table-column property="操作" label="操作" width="120">
                 <template #default="scope">
@@ -72,7 +76,7 @@
     import Foot from "./foot.vue";
     import PlayOrder from "./playOrder.vue";
     import {onBeforeMount, ref} from "vue";
-    import {deleteShoppingCart, getMyCart} from "../apis/shoppingCart/shoppingCart.js";
+    import {deleteShoppingCart, getDrugByBarCode, getMyCart, changeCount} from "../apis/shoppingCart/shoppingCart.js";
     import {ElLoading, ElMessage} from "element-plus";
     import {addOrderFroms} from "../apis/orderFrom/orderFrom.js";
     import {sendO} from "../apis/admin/admin.js";
@@ -195,6 +199,34 @@
         // 后台清除购物车已结算药品
         // 更新购物车
         getCart();
+    }
+
+    // 可以购买的最大数量
+    let buyMaxCount = ref(99999);
+    function changeC(t) {
+        // 获取该商品的库存
+        getDrugByBarCode({
+            barCode: t.barCode
+        }).then((res) => {
+            if (res.code !== "200") {
+                ElMessage.error(res.msg)
+            } else {
+                buyMaxCount.value = res.items[0].count
+            }
+            if (t.count > buyMaxCount.value) {
+                ElMessage.warning("库存不足, 当前库存：" + buyMaxCount.value);
+                t.count = buyMaxCount.value
+            }
+            // 更新购物车SQL数量
+            changeCount(t).then((res) => {
+                if (res.code !== "200") {
+                    ElMessage.error(res.msg)
+                }
+            })
+        })
+        // 四舍五入保留两位
+        t.summary = Math.round(t.price * t.count * 100) / 100;
+        getPlayMany();
     }
 
 </script>
