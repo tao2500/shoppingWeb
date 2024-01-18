@@ -6,11 +6,15 @@
 <template>
     <el-card class="medicineBox">
         <img src= "../assets/img/homeHead/wang.jpg" alt="商品照片">
-        <p>{{medic.name}} - {{medic.size}}</p>
-        <p>库存：{{medic.count}} </p>
+        <span class="txt">
+            <p>{{medic.name}} - {{medic.size}}</p>
+            <p>
+                库存:{{medic.count}}
+                <span style="float: right">单价:{{medic.price}} 元</span>
+            </p>
+        </span>
+
         <p>
-            {{medic.price}} 元
-            <br/>
             <button v-show="cart.count <= 0 && cart.count !== '' && cart.count !== null" class="addCartBut" @click="addCart('addOne')">加入购物车</button>
             <span class="addSub" v-if="cart.count > 0 || cart.count === '' || cart.count === null" @drop="deleteCart">
                 <el-input-number v-model="cart.count" :min="0" :max="medic.count" size="small" label="数量"></el-input-number>
@@ -104,6 +108,11 @@
   .medicineBox {
     min-width: 200px;
     width: 12vw;
+    .txt {
+      display: inline-block;
+      min-width: 163px;
+      min-height: 60px;
+    }
     p {
       font-size: 14px;
         margin: 0;
@@ -117,7 +126,8 @@
       height: 23px;
       //float: right;
       //margin-right: 10px;
-      margin-top: 5px;
+      margin-top: 10px;
+      margin-left: 20px;
       background-color: #6F7FA1;
       color: #fff;
       border: none;
@@ -126,7 +136,12 @@
     .addSub {
         //float: right;
         //margin-right: 10px;
-        margin-top: 5px;
+        margin-left: 20px;
+      .el-input-number {
+        margin-top: 10px;
+        width: 120px;
+        height: 23px;
+      }
         .BTH {
             width: 23px;
             height: 23px;
