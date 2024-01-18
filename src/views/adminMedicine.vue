@@ -48,7 +48,8 @@
                         <el-input v-model="addFrom.barCode" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="药品图片" prop="imgSrc">
-                        <el-input v-model="addFrom.imgSrc"></el-input>
+                        <el-button @click="showChangeImgBox">去编辑</el-button>
+<!--                        <el-input v-model="addFrom.imgSrc"></el-input>-->
                     </el-form-item>
                     <el-form-item label="药品名称" prop="name">
                         <el-input v-model="addFrom.name"></el-input>
@@ -78,16 +79,41 @@
                     <el-button type="primary" v-else @click="editClick">保 存</el-button>
                 </div>
             </el-dialog>
+            <div>
+                <el-dialog title="药品图片" v-model="changeImgBox" width="30%">
+                    <el-upload
+                            v-model:file-list="imgList"
+                            class="imgUpload"
+                            action="#"
+                            :http-request="upLoader"
+                            :on-change="handleChange"
+                            :before-upload="beforeAvatarUpload"
+                            list-type="picture"
+                            drag
+                            multiple>
+                        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                        <div class="el-upload__text">
+                            将图片拖动到此处 或 <em>点我去上传</em>
+                        </div>
+                        <template #tip>
+                            <div class="el-upload__tip">
+                                支持：jpg/png 格式文件 且不大于2MB
+                            </div>
+                        </template>
+                    </el-upload>
+                </el-dialog>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
     import {onBeforeMount, reactive, ref} from "vue";
-    import type { FormInstance, FormRules } from 'element-plus'
+    import type { FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
     import { ElMessageBox } from 'element-plus'
     import {ElMessage} from "element-plus";
-    import { getAllDrugs, editM, addM, delM } from "../apis/admin/admin.js";
+    import { getAllDrugs, editM, addM, delM, editDrugsImg } from "../apis/admin/admin.js";
+    import { UploadFilled } from  "@element-plus/icons-vue";
 
     let tableData = ref([{
         barCode: '123456789',
@@ -245,6 +271,65 @@
         }).catch(() => {
             console.log('已取消下架');
         });
+    }
+
+
+    // 编辑药品图片
+    const imgList = ref<UploadUserFile[]>([
+        // {
+        //     name: 'food.jpeg',
+        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        // },
+        // {
+        //     name: 'food2.jpeg',
+        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+        // },
+    ])
+    let changeImgBox = ref(false);
+    function showChangeImgBox () {
+        changeImgBox.value = true;
+    }
+    const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
+        console.log("文件：" + uploadFile.name + uploadFile.raw);
+        ElMessage.success(uploadFile.name);
+        uploadFileList.value.push(uploadFile);
+        // imgList.value = imgList.value.slice(-3)
+    }
+
+    let imageUrl = ref("");
+    function handleAvatarSuccess(res, file) {
+        imageUrl.value = URL.createObjectURL(file.raw);
+    }
+    function beforeAvatarUpload(file) {
+        // elementUI中，自带的方法中的file，并不是指图片本身，而是他的一个dom。如果要是拿他的图片，就要用file.raw。
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isJPG) {
+            ElMessage.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+            ElMessage.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+    }
+    let uploadFileList = ref([]);
+    function upLoader() {
+        if(uploadFileList.value.length === 0) return;
+        // 如果要传递的是多个参数，则必须把多个参数整理成formData的形式进行发送。而到后端则需要用@RequestParam注解标识进行接收。
+        let barCode = addFrom.value.barCode;
+        let formData = new FormData();
+        formData.append("barCode", barCode);
+        uploadFileList.value.forEach((item) => {
+            formData.append("file", item.raw);
+        });
+        ElMessage.success("上传中...");
+        editDrugsImg(formData).then((res) => {
+            if (res.code !== "200") {
+                ElMessage.error(res.msg);
+            } else {
+                ElMessage.success(res.msg);
+            }
+        })
     }
 </script>
 

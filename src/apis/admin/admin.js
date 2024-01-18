@@ -41,6 +41,20 @@ export const delM = params => {
     })
 }
 
+// 修改药品照片列表
+export const editDrugsImg = params => {
+    return request({
+        url: `/drugs/editDrugsImg`,
+        data: params,
+        method: 'post',
+        headers: {
+            // 'Content-Type': 'application/json'
+            // 'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    })
+}
+
 // 订单管理
 export function getAllOrders() {
     return request({
