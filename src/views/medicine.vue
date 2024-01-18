@@ -9,11 +9,14 @@
         <p>{{medic.name}} - {{medic.size}}</p>
         <p>库存：{{medic.count}} </p>
         <p>
-            {{medic.price}} 元<button v-show="cart.count <= 0 && cart.count !== ''" class="addCartBut" @click="addCart('addOne')">加入购物车</button>
-            <span class="addSub" v-if="cart.count > 0 || cart.count === ''" @drop="deleteCart">
-                <RemoveFilled class="BTH" @click="addCart('sub')"></RemoveFilled>
-                <span class="count"><input type="number" v-model="cart.count"/></span>
-                <CirclePlusFilled class="BTH" @click="addCart('add')"></CirclePlusFilled>
+            {{medic.price}} 元
+            <br/>
+            <button v-show="cart.count <= 0 && cart.count !== '' && cart.count !== null" class="addCartBut" @click="addCart('addOne')">加入购物车</button>
+            <span class="addSub" v-if="cart.count > 0 || cart.count === '' || cart.count === null" @drop="deleteCart">
+                <el-input-number v-model="cart.count" :min="0" :max="medic.count" size="small" label="数量"></el-input-number>
+<!--                <RemoveFilled class="BTH" @click="addCart('sub')"></RemoveFilled>-->
+<!--                <span class="count"><input type="number" v-model="cart.count"/></span>-->
+<!--                <CirclePlusFilled class="BTH" @click="addCart('add')"></CirclePlusFilled>-->
             </span>
         </p>
     </el-card>
@@ -87,7 +90,7 @@
             ElMessage.error("库存不足")
             cart.value.count = medic.value.count
         }
-        if(cart.value.count <= 0 && oVal.value > 0) {
+        if(cart.value.count <= 0 && (oVal.value > 0 || oVal.value === null) && cart.value.count !== null) {
             deleteCart()
         }
         if(cart.value.count >= 1 && oVal.value >= 1) {
@@ -110,17 +113,20 @@
       width: 10vw;
     }
     .addCartBut {
+      width: 120px;
       height: 23px;
-      float: right;
-      margin-right: 10px;
+      //float: right;
+      //margin-right: 10px;
+      margin-top: 5px;
       background-color: #6F7FA1;
       color: #fff;
       border: none;
       border-radius: 5px;
     }
     .addSub {
-        float: right;
-        margin-right: 10px;
+        //float: right;
+        //margin-right: 10px;
+        margin-top: 5px;
         .BTH {
             width: 23px;
             height: 23px;

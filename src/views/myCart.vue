@@ -116,7 +116,7 @@
 
     function getSummary () {
         tableData.value.forEach(item => {
-            item.summary = Math.ceil(item.price * item.count *100) / 100
+            item.summary = Math.round(item.price * item.count *100) / 100
         })
     }
 
@@ -131,7 +131,7 @@
 
     function getPlayMany () {
         // 计算总金额，保留两位小数
-        orderMsg.value.playMeny = Math.ceil(multipleSelection.value.reduce((sum, item) => sum + item.summary , 0) * 100) / 100;
+        orderMsg.value.playMeny = Math.round(multipleSelection.value.reduce((sum, item) => sum + item.summary , 0) * 100) / 100;
     }
 
 
@@ -204,6 +204,10 @@
     // 可以购买的最大数量
     let buyMaxCount = ref(99999);
     function changeC(t) {
+        if (t.count <= 0) {
+            ElMessage.warning("购买数量不能小于0")
+            t.count = 1
+        }
         // 获取该商品的库存
         getDrugByBarCode({
             barCode: t.barCode
