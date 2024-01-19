@@ -48,7 +48,8 @@ export const getDrugsImg = params => {
         data: params,
         method: 'post',
         headers: {
-            'Content-Type': 'application/json'
+            // 'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
     })
 }

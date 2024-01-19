@@ -113,7 +113,7 @@
     import type { FormInstance, FormRules, UploadProps, UploadUserFile } from 'element-plus'
     import { ElMessageBox } from 'element-plus'
     import {ElMessage} from "element-plus";
-    import { getAllDrugs, editM, addM, delM, editDrugsImg } from "../apis/admin/admin.js";
+    import { getAllDrugs, editM, addM, delM, editDrugsImg, getDrugsImg } from "../apis/admin/admin.js";
     import { UploadFilled } from  "@element-plus/icons-vue";
 
     let tableData = ref([{
@@ -247,6 +247,12 @@
         addFrom.value = JSON.parse(JSON.stringify(tableData.value[index]));
         isEdit.value = true;
         showAMB.value = true;
+        imgList.value = [];
+        // 获取商品照片
+        imgList.value.push({
+            name: "药品照片",
+            url: 'http://127.0.0.1:5173/api/drugs/getDrugsImg?barCode=' + addFrom.value.barCode,
+        })
     }
 
     function deleteMed (index: number) {
@@ -281,10 +287,6 @@
         //     name: 'food.jpeg',
         //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
         // },
-        // {
-        //     name: 'food2.jpeg',
-        //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-        // },
     ])
     let changeImgBox = ref(false);
     function showChangeImgBox () {
@@ -292,9 +294,10 @@
     }
     const handleChange: UploadProps['onChange'] = (uploadFile, uploadFiles) => {
         console.log("文件：" + uploadFile.name + uploadFile.raw);
-        ElMessage.success(uploadFile.name);
+        // ElMessage.success(uploadFile.name);
         uploadFileList.value.push(uploadFile);
-        // imgList.value = imgList.value.slice(-3)
+        imgList.value = imgList.value.slice(-1);
+        uploadFileList.value = uploadFileList.value.slice(-1);
     }
 
     let imageUrl = ref("");
@@ -304,12 +307,12 @@
     function beforeAvatarUpload(file) {
         // elementUI中，自带的方法中的file，并不是指图片本身，而是他的一个dom。如果要是拿他的图片，就要用file.raw。
         const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        const isLt2M = file.size / 1024 / 1024 < 10;
         if (!isJPG) {
             ElMessage.error('上传头像图片只能是 JPG 格式!');
         }
         if (!isLt2M) {
-            ElMessage.error('上传头像图片大小不能超过 2MB!');
+            ElMessage.error('上传头像图片大小不能超过 10MB!');
         }
         return isJPG && isLt2M;
     }
