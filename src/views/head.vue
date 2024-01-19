@@ -265,7 +265,7 @@
           font-size: 20px;
           font-weight: 400;
           color: #333333;
-          line-height: 0;
+          line-height: 20px;
           -webkit-background-clip: text;
           margin-top: 20px;
         }

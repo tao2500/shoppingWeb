@@ -85,6 +85,7 @@
                             v-model:file-list="imgList"
                             class="imgUpload"
                             action="#"
+                            accept=".jpg, .jpeg"
                             :http-request="upLoader"
                             :on-change="handleChange"
                             :before-upload="beforeAvatarUpload"

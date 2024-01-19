@@ -89,7 +89,7 @@
             </el-main>
             <el-footer class="foot">
                 <!--<br>-->
-                <span class="footTwo">© 2024 康无忧 京ICP备2024044988号</span>
+                <span class="footTwo">© 2024 康无忧 粤ICP备2024044988号</span>
                 <span class="footOne"> <span class="link" @click="showContactUs">联系我们</span>
                     <span class="link" @click="showJoinTheCommunity"></span>
                 </span>
@@ -618,7 +618,7 @@
           line-height: 0;
           -webkit-background-clip: text;
 
-          .text {
+          .text1 {
             font-size: 14px;
             font-family: PingFang SC-Regular, PingFang SC;
             font-weight: 400;
@@ -685,7 +685,7 @@
     .imgBox {
       display: block;
       width: 400px;
-      height: 400px;
+      height: 390px;
       // 改变层级
       position: absolute;
       top: 100px;

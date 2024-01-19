@@ -41,7 +41,20 @@ export const delM = params => {
     })
 }
 
-// 修改药品照片列表
+// 读取当前药物照片列表
+export const getDrugsImg = params => {
+    return request({
+        url: `/drugs/getDrugsImg`,
+        data: params,
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+}
+
+
+    // 修改药品照片列表
 export const editDrugsImg = params => {
     return request({
         url: `/drugs/editDrugsImg`,
