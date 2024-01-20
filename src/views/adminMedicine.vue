@@ -5,6 +5,15 @@
 -->
 <template>
     <div class="adminMedicine">
+        <div class="search">
+            <span class="txt-search">
+                <input placeholder="请输入药品关键字" v-model="searchTxt" @keyup.enter="searchClick"/>
+            </span>
+            <span class="searchBUT">
+                <el-button type="primary" size="small" @click="searchClick">搜索</el-button>
+                <el-button type="primary" size="small" @click="getAllDrug">浏览所有药品</el-button>
+            </span>
+        </div>
         <el-table :data="tableData" style="width: 100%">
             <el-table-column fixed  prop="name" label="药品"></el-table-column>
             <el-table-column prop="size" label="规格"></el-table-column>
@@ -114,6 +123,7 @@
     import { ElMessageBox } from 'element-plus'
     import {ElMessage} from "element-plus";
     import { getAllDrugs, editM, addM, delM, editDrugsImg, getDrugsImg } from "../apis/admin/admin.js";
+    import {getDrugByName} from "../apis/home/index.js";
     import { UploadFilled } from  "@element-plus/icons-vue";
 
     let tableData = ref([{
@@ -333,14 +343,51 @@
             }
         })
     }
+
+    let searchTxt = ref('');
+    function searchClick() {
+        if (searchTxt.value === ''){
+            ElMessage.error('请输入药品关键字');
+            return;
+        }
+        getDrugByName({name: searchTxt.value}).then(res => {
+            if (res.code === "200"){
+                tableData.value = res.items;
+            } else {
+                ElMessage.error(res.msg);
+                searchTxt.value = '';
+            }
+        })
+    }
 </script>
 
 <style lang="less" scoped>
   .adminMedicine {
     height: calc(100vh - 110px);
     overflow: auto;
+    .search {
+      text-align: right;
+      margin: 10px 20px;
+
+      .txt-search {
+        margin-left: 20px;
+        input {
+          width: 260px;
+          height: 30px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          padding: 0 10px;
+        }
+      }
+      .searchBUT {
+        margin-left: 20px;
+        :deep(.el-button--small) {
+          height: 30px;
+        }
+      }
+    }
     .el-table {
-      max-height: calc(100vh - 140px);
+      max-height: calc(100vh - 186px);
       overflow: auto;
       z-index: 0;
     }
