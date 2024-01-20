@@ -5,7 +5,8 @@
 -->
 <template>
     <el-card class="medicineBox">
-        <img src= "../assets/img/homeHead/wang.jpg" alt="商品照片">
+<!--        <img src= "../assets/img/homeHead/wang.jpg" alt="商品照片">-->
+        <img :src="'http://127.0.0.1:5173/api/drugs/getDrugsImg?barCode=' + cart.barCode " alt="商品照片">
         <span class="txt">
             <p>{{medic.name}} - {{medic.size}}</p>
             <p>

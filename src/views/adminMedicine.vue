@@ -48,8 +48,8 @@
                         <el-input v-model="addFrom.barCode" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="药品图片" prop="imgSrc">
-                        <el-button @click="showChangeImgBox">去编辑</el-button>
-<!--                        <el-input v-model="addFrom.imgSrc"></el-input>-->
+                        <el-input v-if="!isEdit" v-model="addFrom.imgSrc"></el-input>
+                        <el-button v-else  @click="showChangeImgBox">去编辑</el-button>
                     </el-form-item>
                     <el-form-item label="药品名称" prop="name">
                         <el-input v-model="addFrom.name"></el-input>
@@ -296,14 +296,12 @@
         console.log("文件：" + uploadFile.name + uploadFile.raw);
         // ElMessage.success(uploadFile.name);
         uploadFileList.value.push(uploadFile);
-        imgList.value = imgList.value.slice(-1);
-        uploadFileList.value = uploadFileList.value.slice(-1);
+        // 只能上传一张
+        if (uploadFiles.length > 1) {
+            uploadFiles.shift();
+        }
     }
-
-    let imageUrl = ref("");
-    function handleAvatarSuccess(res, file) {
-        imageUrl.value = URL.createObjectURL(file.raw);
-    }
+    // 上传之前检查格式
     function beforeAvatarUpload(file) {
         // elementUI中，自带的方法中的file，并不是指图片本身，而是他的一个dom。如果要是拿他的图片，就要用file.raw。
         const isJPG = file.type === 'image/jpeg';
