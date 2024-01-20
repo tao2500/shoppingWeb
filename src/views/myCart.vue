@@ -40,8 +40,8 @@
         </div>
     </div>
     <div class="setAddress">
-        <el-dialog v-model="showAddress" class="dial" title="确认地址" width="30%">
-            <el-form :model="shoppingAdd" label-width="120px">
+        <el-dialog v-model="showAddress" class="dial" title="确认地址" width="400px">
+            <el-form :model="shoppingAdd" label-width="80px">
                 <el-form-item label="收货人">
                     <el-input v-model="shoppingAdd.name" placeholder="请输入收货人姓名"></el-input>
                 </el-form-item>
@@ -59,6 +59,11 @@
                     <el-radio-button label="同城闪送">同城闪送</el-radio-button>
                 </el-radio-group>
             </span>
+            <span class="shoppingCost">
+                预收运费：
+                <span style="color: red;">￥{{shippingCosts}}</span>
+                <span class="tip" v-show="shoppingAdd.delivery === '同城闪送'">闪送到付，平台不预收运费</span>
+            </span>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="showAddress = false">取 消</el-button>
                 <el-button type="primary" @click="goPlay">支 付</el-button>
@@ -75,7 +80,7 @@
     import Head from "./head.vue";
     import Foot from "./foot.vue";
     import PlayOrder from "./playOrder.vue";
-    import {onBeforeMount, ref} from "vue";
+    import {onBeforeMount, ref, watch} from "vue";
     import {deleteShoppingCart, getDrugByBarCode, getMyCart, changeCount} from "../apis/shoppingCart/shoppingCart.js";
     import {ElLoading, ElMessage} from "element-plus";
     import {addOrderFroms} from "../apis/orderFrom/orderFrom.js";
@@ -123,9 +128,9 @@
     onBeforeMount(() =>{
         let customer = JSON.parse(localStorage.getItem("customer"));
         cId.value = customer.id;
+        if (customer.telephone) shoppingAdd.value.telephone = customer.telephone;
+        if (customer.address) shoppingAdd.value.address = customer.address;
         shoppingAdd.value.name = customer.name;
-        shoppingAdd.value.telephone = customer.telephone;
-        shoppingAdd.value.address = customer.address;
         getCart();
     })
 
@@ -169,6 +174,20 @@
         delivery: "快递发货"
     });
     function goPlay() {
+        if (shoppingAdd.value.name === "") {
+            ElMessage.warning("请填写收货人");
+            return;
+        }
+        if (shoppingAdd.value.telephone === "") {
+            ElMessage.warning("请填写联系电话");
+            return;
+        }
+        if (shoppingAdd.value.address === "") {
+            ElMessage.warning("请填写收货地址");
+            return;
+        }
+        // 加上配送费
+        multipleSelection.value[0].price = shippingCosts.value + parseFloat(multipleSelection.value[0].price);
         // 传输收获地址及方式
         multipleSelection.value[0].address = shoppingAdd.value.name + ',' + shoppingAdd.value.telephone + ',' + shoppingAdd.value.address + ',' + shoppingAdd.value.delivery;
         // 依据所选药品创建订单，状态为待支付，返回数据库生成的订单号，用于支付页修改订单状态
@@ -182,6 +201,8 @@
                 orderMsg.value.orderId = res.items[0].idOrderFrom
             }
         })
+        // 支付页加上运费
+        orderMsg.value.playMeny += shippingCosts.value;
         // 跳转支付页
         orderMsg.value.show = true
         showAddress.value = false
@@ -233,6 +254,29 @@
         getPlayMany();
     }
 
+    // 默认运费
+    let shippingCosts = ref(0);
+    // 监听收货地址及配送方式，更新运费
+    watch(shoppingAdd.value, () => {
+        if (shoppingAdd.value.delivery === '同城闪送') {
+            shippingCosts.value = 0;
+        } else {
+            // ElMessage.warning("快递配送");
+            if (shoppingAdd.value.address !== "") {
+                // getShippingCosts();
+                // ElMessage.success("已修改金额")
+                shippingCosts.value = getShippingCosts();
+            } else {
+                shippingCosts.value = 0;
+            }
+        }
+
+    })
+    // 获取该地址的配送金额
+    function getShippingCosts() {
+        return 6;
+    }
+
 </script>
 
 <style lang="less" scoped>
@@ -268,7 +312,18 @@
         text-align: right;
       }
       .selectDelivery {
-        margin: 0 0 10px 10%;
+        display: inline-block;
+        margin: 0 0 10px 3%;
+      }
+      .shoppingCost {
+        display: inline-block;
+        margin: 0 0 10px 3%;
+        .tip {
+          display: inline-block;
+          background-color: #ffcccc;
+          padding: 3px 20px 3px 8px;
+          margin: -3px 0 -3px 8px;
+        }
       }
     }
   }
