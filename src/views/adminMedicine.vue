@@ -56,9 +56,9 @@
                     <el-form-item v-else label="药品编码">
                         <el-input v-model="addFrom.barCode" disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="药品图片" prop="imgSrc">
-                        <el-input v-if="!isEdit" v-model="addFrom.imgSrc"></el-input>
-                        <el-button v-else  @click="showChangeImgBox">去编辑</el-button>
+                    <el-form-item label="药品照片" prop="imgSrc">
+                        <el-input v-if="!isEdit" v-model="addFrom.imgSrc" placeholder="请输入药品照片名称"></el-input>
+                        <el-button v-else  @click="showChangeImgBox">查看照片</el-button>
                     </el-form-item>
                     <el-form-item label="药品名称" prop="name">
                         <el-input v-model="addFrom.name"></el-input>
@@ -227,6 +227,7 @@
     }
 
     function addAMBOk () {
+        addFrom.value.imgSrc = "";
         addM(
             addFrom.value
         ).then(res => {
