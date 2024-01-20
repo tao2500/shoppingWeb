@@ -56,7 +56,7 @@
                 配送方式
                 <el-radio-group v-model="shoppingAdd.delivery" size="large">
                     <el-radio-button label="快递发货">快递发货</el-radio-button>
-                    <el-radio-button label="同城闪送">同城闪送</el-radio-button>
+                    <el-radio-button label="同城闪送" :disabled="showLocalDelivery" >同城闪送</el-radio-button>
                 </el-radio-group>
             </span>
             <span class="shoppingCost">
@@ -81,7 +81,13 @@
     import Foot from "./foot.vue";
     import PlayOrder from "./playOrder.vue";
     import {onBeforeMount, ref, watch} from "vue";
-    import {deleteShoppingCart, getDrugByBarCode, getMyCart, changeCount} from "../apis/shoppingCart/shoppingCart.js";
+    import {
+        deleteShoppingCart,
+        getDrugByBarCode,
+        getMyCart,
+        changeCount,
+        selectedFreight, selectedRun
+    } from "../apis/shoppingCart/shoppingCart.js";
     import {ElLoading, ElMessage} from "element-plus";
     import {addOrderFroms} from "../apis/orderFrom/orderFrom.js";
     import {sendO} from "../apis/admin/admin.js";
@@ -241,6 +247,7 @@
             if (t.count > buyMaxCount.value) {
                 ElMessage.warning("库存不足, 当前库存：" + buyMaxCount.value);
                 t.count = buyMaxCount.value
+                getSummary();
             }
             // 更新购物车SQL数量
             changeCount(t).then((res) => {
@@ -262,21 +269,51 @@
             shippingCosts.value = 0;
         } else {
             // ElMessage.warning("快递配送");
-            if (shoppingAdd.value.address !== "") {
-                // getShippingCosts();
-                // ElMessage.success("已修改金额")
-                shippingCosts.value = getShippingCosts();
+            if (shoppingAdd.value.address !== "" && shoppingAdd.value.address.length >= 2) {
+                getLocalDelivery();
+                getShippingCosts();
             } else {
                 shippingCosts.value = 0;
             }
+        }
+        if (shoppingAdd.value.address.length <= 3) {
+            shoppingAdd.value.delivery = '快递发货';
+            showLocalDelivery.value = true;
         }
 
     })
     // 获取该地址的配送金额
     function getShippingCosts() {
-        return 6;
+        selectedFreight({
+            cities:  shoppingAdd.value.address,
+        }).then((res) => {
+            if (res.code !== "200") {
+                console.log("尝试获取快递费用" + res.msg);
+            } else {
+                shippingCosts.value = parseInt(res.msg);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
+    // 是否禁用“同城闪送选项”
+    let showLocalDelivery = ref(true);
+    function  getLocalDelivery() {
+        selectedRun({
+            cities:  shoppingAdd.value.address,
+        }).then((res) => {
+            if (res.code !== "200") {
+                console.log("尝试判断是否支持闪送" + res.msg);
+            } else {
+                if (res.msg === "支持闪送") {
+                    showLocalDelivery.value = false;
+                }
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
 </script>
 
 <style lang="less" scoped>
@@ -316,7 +353,7 @@
         margin: 0 0 10px 3%;
       }
       .shoppingCost {
-        display: inline-block;
+        display: block;
         margin: 0 0 10px 3%;
         .tip {
           display: inline-block;

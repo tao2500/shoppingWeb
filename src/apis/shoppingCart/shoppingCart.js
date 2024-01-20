@@ -50,3 +50,27 @@ export function getDrugByBarCode(params) {
         }
     })
 }
+
+// 根据城市获取快递运费
+export function selectedFreight(params) {
+    return request({
+        url: '/freight/selectedFreight',
+        method: 'post',
+        data: params,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+}
+
+// 查询该城市是否支持跑腿
+export function selectedRun(params) {
+    return request({
+        url: '/freight/canRunErrands',
+        method: 'post',
+        data: params,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+}

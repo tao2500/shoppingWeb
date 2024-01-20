@@ -25,7 +25,7 @@
                 <div class="logOutBox" v-show="listShow">
                     <div class="Smegma" @click="listShow = !listShow"></div>
                     <div class="LBPhone">欢迎：{{ userInfo.name }}</div>
-                    <div class="upDataMsg" v-show="!userInfo.duties" @click="upDataMsg">编辑资料</div>
+                    <div class="upDataMsg" @click="upDataMsg">{{!userInfo.duties ? "编辑资料" : ""}}</div>
                     <span class="logOutBoxLine"></span>
                     <p class="logout" @click="logOut">退出登录</p>
                 </div>
@@ -107,8 +107,11 @@
             }
             let editMsgBox = ref(false);
             function upDataMsg() {
-                editMsg.value = JSON.parse(JSON.stringify(userInfo));
-                editMsgBox.value = true;
+                // 不是管理员才显示编辑资料
+                if (userInfo.telephone) {
+                    editMsg.value = JSON.parse(JSON.stringify(userInfo));
+                    editMsgBox.value = true;
+                }
             }
             const editClose = () => {
                 editMsgBox.value = false;
@@ -243,7 +246,7 @@
 
       .logOutBox {
         width: 158px;
-        height: 126px;
+        height: 130px;
         background: #FFFFFF;
         box-shadow: 0 5px 15px 1px rgba(51,51,51,0.15);
         opacity: 1;
@@ -271,7 +274,7 @@
         }
         .upDataMsg {
           color: #2365F3;
-          margin: 10px 0 -20px 0;
+          height: 40px;
         }
         .logOutBoxLine{
           display: inline-block;
@@ -279,7 +282,9 @@
           height: 0;
           opacity: 1;
           border: 1px solid #F4F4F4;
-          //margin-top: -20px;
+          line-height: 0;
+          position: relative;
+          top: -20px;
         }
         .logout {
           font-size: 19px;
@@ -287,7 +292,7 @@
           font-weight: 400;
           color: #EA7F48;
           -webkit-background-clip: text;
-          margin-top: -5px;
+          margin-top: -30px;
         }
       }
     }
