@@ -31,19 +31,19 @@
                             link
                             type="primary"
                             size="small"
-                            v-if="scope.row.status === '待支付'"
-                            @click="confirmPayment(scope.$index)"
+                            v-if="scope.row.status === '待支付' || scope.row.status === '待发货'"
+                            @click="cancellation(scope.$index)"
                     >
-                        确认支付
+                        取消订单
                     </el-button>
                     <el-button
                             link
                             type="primary"
                             size="small"
-                            v-if="scope.row.status !== '已取消'"
-                            @click="cancellation(scope.$index)"
+                            v-if="scope.row.status === '待支付'"
+                            @click="confirmPayment(scope.$index)"
                     >
-                        取消订单
+                        确认支付
                     </el-button>
                     <el-button
                             link
