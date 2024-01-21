@@ -15,7 +15,7 @@
             </p>
         </span>
 
-        <p>
+        <p v-if="!isSellOut">
             <button v-show="cart.count <= 0 && cart.count !== '' && cart.count !== null" class="addCartBut" @click="addCart('addOne')">加入购物车</button>
             <span class="addSub" v-if="cart.count > 0 || cart.count === '' || cart.count === null" @drop="deleteCart">
                 <el-input-number v-model="cart.count" :min="0" :max="medic.count" size="small" label="数量"></el-input-number>
@@ -23,6 +23,9 @@
 <!--                <span class="count"><input type="number" v-model="cart.count"/></span>-->
 <!--                <CirclePlusFilled class="BTH" @click="addCart('add')"></CirclePlusFilled>-->
             </span>
+        </p>
+        <p v-else class="soldOut">
+            已售罄
         </p>
     </el-card>
 </template>
@@ -66,6 +69,10 @@
                 cart.value.count = res.items[0].count;
             }
         })
+        // 判断是否已售空
+        if (medic.value.count === 0) {
+            isSellOut.value = true;
+        }
     })
 
     function addCart(msg) {
@@ -113,6 +120,9 @@
         }
         oVal.value = cart.value.count
     })
+
+    // 是否已售罄
+    let isSellOut = ref(false);
 </script>
 
 <style lang="less" scoped>
@@ -176,6 +186,14 @@
             -webkit-appearance: none;
           }
         }
+    }
+    .soldOut {
+      text-align: center;
+      background-color: #ccc;
+      cursor: not-allowed;
+      margin-top: 8px;
+      padding: 3px 0;
+      border-radius: 5px;
     }
   }
 </style>
