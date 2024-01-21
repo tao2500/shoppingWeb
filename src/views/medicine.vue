@@ -34,6 +34,7 @@
         addShoppingCart,
         changeCount,
         deleteShoppingCart,
+        getMyCartDrugsCount,
     } from '../apis/shoppingCart/shoppingCart.js';
     import {ElMessage} from "element-plus";
 
@@ -56,6 +57,15 @@
         cart.value.joinTime =  new Date().toLocaleString()
         cart.value.customerId = JSON.parse(localStorage.getItem("customer")).id
         cart.value.barCode = medic.value.barCode
+        // 获取已加购的个数
+        getMyCartDrugsCount({
+            customerId: cart.value.customerId,
+            barCode: cart.value.barCode
+        }).then((res) => {
+            if (res.code === "200") {
+                cart.value.count = res.items[0].count;
+            }
+        })
     })
 
     function addCart(msg) {

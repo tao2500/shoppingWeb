@@ -74,3 +74,15 @@ export function selectedRun(params) {
         }
     })
 }
+
+// 查询当前顾客该药品已加购个数
+export function getMyCartDrugsCount(params) {
+    return request({
+        url: '/shoppingCart/getMyCartDrugsCount',
+        method: 'post',
+        data: params,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+}
