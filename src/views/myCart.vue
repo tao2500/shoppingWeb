@@ -188,8 +188,8 @@
             ElMessage.warning("请填写联系电话");
             return;
         }
-        if (shoppingAdd.value.address === "") {
-            ElMessage.warning("请填写收货地址");
+        if (shoppingAdd.value.address.length < 3) {
+            ElMessage.warning("请填写有效收货地址");
             return;
         }
         // 加上配送费

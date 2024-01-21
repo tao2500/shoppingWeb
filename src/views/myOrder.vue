@@ -93,7 +93,7 @@
     let tableData = ref([{
         idOrderFrom: 1,
         customerId: 1,
-        detail: "喜达、2，布洛芬、1，维生素B族咀嚼片、3",
+        detail: "喜达*2；布洛芬*1；维生素B族咀嚼片*3",
         shoppingAdd: '广东省广州市花都区秀全街道学府路1号广州城市理工学院',
         delivery: "同城闪送",
         waybillNumber: "SF1234567890",
@@ -183,7 +183,8 @@
         .then(() => {
             upDataOrderFromStatus({
                 idOrderFrom: t.idOrderFrom,
-                status: "已取消"
+                status: "已取消",
+                drugList: t.detail,
             }).then((res) => {
                 if (res.code !== "200") {
                     ElMessage.error("取消失败，请联系工作人员");
