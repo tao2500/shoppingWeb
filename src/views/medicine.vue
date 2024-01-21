@@ -62,7 +62,7 @@
             customerId: cart.value.customerId,
             barCode: cart.value.barCode
         }).then((res) => {
-            if (res.code === "200") {
+            if (res.code === "200" && res.items.length > 0) {
                 cart.value.count = res.items[0].count;
             }
         })

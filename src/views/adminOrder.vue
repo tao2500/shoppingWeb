@@ -31,6 +31,15 @@
                             link
                             type="primary"
                             size="small"
+                            v-if="scope.row.status === '待支付'"
+                            @click="confirmPayment(scope.$index)"
+                    >
+                        确认支付
+                    </el-button>
+                    <el-button
+                            link
+                            type="primary"
+                            size="small"
                             v-if="scope.row.status !== '已取消'"
                             @click="cancellation(scope.$index)"
                     >
@@ -73,6 +82,7 @@
     import {onBeforeMount, ref} from "vue";
     import {ElMessage, ElMessageBox} from "element-plus";
     import {delO, getAllOrders, getByStatu, sendO} from "../apis/admin/admin.js";
+    import {playOKK} from "../apis/orderFrom/orderFrom.js";
 
     let tableData = ref([{
         idOrderFrom: '123456789',
@@ -96,7 +106,14 @@
             tableData.value = res.items
         })
     }
+    let user = JSON.parse(localStorage.getItem('customer'));
     onBeforeMount(() => {
+        // 身份检查
+        if (!user.duties) {
+            ElMessage.error('您没有权限访问该页面');
+            window.location.href = '/';
+            return;
+        }
         getByStatus();
     })
 
@@ -186,6 +203,27 @@
         } else {
             getByStatus();
         }
+    }
+
+    // 确认汇款支付
+    function confirmPayment(index) {
+        ElMessageBox.confirm('请仔细确认银行流水，确定汇款已到账？' , '提示', {
+            confirmButtonText: '确 定',
+            cancelButtonText: '取 消',
+            type: 'warning'
+        }).then(() => {
+            // 订单状态更改为待发货
+            playOKK({
+                idOrderFrom: tableData.value[index].idOrderFrom,
+            }).then((res) => {
+                if (res.code !== "200") {
+                    ElMessage.error("操作失败，请稍后重试");
+                } else {
+                    tableData.value[index].status = "待发货";
+                    ElMessage.success("操作成功");
+                }
+            })
+        })
     }
 </script>
 

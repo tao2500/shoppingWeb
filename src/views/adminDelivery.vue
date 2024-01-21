@@ -68,6 +68,7 @@
     import {onBeforeMount, ref} from "vue";
     import {addD, addS, delD, delS, editD, editS, getAllFreight} from "../apis/admin/admin.js";
     import {ElMessage, ElMessageBox} from "element-plus";
+    import router from "../router/index.js";
 
     let tableData = ref([{
         id: '1',
@@ -76,7 +77,15 @@
         cities: '广州,深圳,珠海',
     }])
 
+    let user = JSON.parse(localStorage.getItem('customer'));
     onBeforeMount(() => {
+        // 身份检查
+        if (user.duties !== "超级管理员") {
+            ElMessage.error('您没有权限访问该页面');
+            // 转跳到admin/adminDelivery
+            router.replace({path: '/admin/adminMedicine'})
+            return;
+        }
         getAll()
     })
 

@@ -60,12 +60,13 @@
         })
     }
 
-    let medic = ref([{
-        img: '../assets/img/homeHead/wang.jpg',
-        name: '阿莫西林',
-        price: 10,
-        count: 99,
-    }]);
+    // let medic = ref([{
+    //     img: '../assets/img/homeHead/wang.jpg',
+    //     name: '阿莫西林',
+    //     price: 10,
+    //     count: 99,
+    // }]);
+    let medic = ref([]);
 </script>
 
 <style lang="less" scoped>

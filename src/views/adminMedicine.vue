@@ -137,8 +137,14 @@
         price: '23.00',
         expires: '2025',
     }]);
-
+    let user = JSON.parse(localStorage.getItem('customer'));
     onBeforeMount(() => {
+        // 身份检查
+        if (!user.duties) {
+            ElMessage.error('您没有权限访问该页面');
+            window.location.href = '/';
+            return;
+        }
         getAllDrug();
     })
 
