@@ -22,6 +22,14 @@
     import Foot from "./foot.vue";
     import adminAside from "./adminAside.vue";
     import AdminAside from "./adminAside.vue";
+    import {ElMessage} from "element-plus";
+
+    let user = JSON.parse(localStorage.getItem('customer'));
+    // 身份检查
+    if (!user.duties) {
+        ElMessage.error('您没有权限访问该页面');
+        window.location.href = '/';
+    }
 
 </script>
 

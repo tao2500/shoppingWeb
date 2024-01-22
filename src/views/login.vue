@@ -279,7 +279,7 @@
                 console.log("登录成功", res);
                 userInfo.value = res.items[0];
                 localStorage.setItem("customer", JSON.stringify(userInfo.value));
-                localStorage.setItem("admin", "false");
+                // localStorage.setItem("admin", "false");
                 ElMessage.success("登录成功");
                 loading.close();
                 router.replace({path: "/home"});
@@ -293,7 +293,7 @@
                         console.log("登录成功", res);
                         userInfo.value = res.items[0];
                         localStorage.setItem("customer", JSON.stringify(userInfo.value));
-                        localStorage.setItem("admin", "true");
+                        // localStorage.setItem("admin", "true");
                         ElMessage.success("登录成功");
                         loading.close();
                         router.replace({path: "/home"});

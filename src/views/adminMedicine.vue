@@ -11,7 +11,7 @@
             </span>
             <span class="searchBUT">
                 <el-button type="primary" size="small" @click="searchClick">搜索</el-button>
-                <el-button type="primary" size="small" @click="getAllDrug">浏览所有药品</el-button>
+                <el-button type="primary" size="small" @click="getAllDrug">查看全部</el-button>
             </span>
         </div>
         <el-table :data="tableData" style="width: 100%">

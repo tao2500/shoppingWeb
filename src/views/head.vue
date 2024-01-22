@@ -261,7 +261,7 @@
           right: 0;
           bottom: 0;
           left: 0;
-          //background-color: rgba(0,0,0,.4);
+          background-color: rgba(0,0,0,.4);
           z-index: -1;
         }
         .LBPhone {
@@ -277,14 +277,13 @@
           height: 40px;
         }
         .logOutBoxLine{
-          display: inline-block;
+          display: block;
           width: 156px;
-          height: 0;
-          opacity: 1;
-          border: 1px solid #F4F4F4;
-          line-height: 0;
-          position: relative;
-          top: -20px;
+          height: 1px;
+          //margin-top: 20px;
+          background-color: #999999;
+          transform: scaleY(0.5);
+          transform-origin: 50% 100%;
         }
         .logout {
           font-size: 19px;
@@ -292,7 +291,7 @@
           font-weight: 400;
           color: #EA7F48;
           -webkit-background-clip: text;
-          margin-top: -30px;
+          margin-top: -1px;
         }
       }
     }
