@@ -49,7 +49,7 @@
                             link
                             type="primary"
                             size="small"
-                            v-if="scope.row.status === '已取消'"
+                            v-if="scope.row.status === '已取消' || scope.row.status === '已退款' || scope.row.status === '已完成'"
                             @click="deleteOrder(scope.$index)"
                     >
                         删除订单

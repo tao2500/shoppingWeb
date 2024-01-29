@@ -23,10 +23,11 @@
 <!--                <span class="count"><input type="number" v-model="cart.count"/></span>-->
 <!--                <CirclePlusFilled class="BTH" @click="addCart('add')"></CirclePlusFilled>-->
             </span>
+
         </p>
-        <p v-else class="soldOut">
+        <span v-else class="soldOut">
             已售罄
-        </p>
+        </span>
     </el-card>
 </template>
 
@@ -188,11 +189,18 @@
         }
     }
     .soldOut {
+      display: inline-block;
+      width: 120px;
+      height: 22px;
+      //float: right;
+      //margin-right: 10px;
+      margin-top: 10px;
+      margin-left: 20px;
       text-align: center;
       background-color: #ccc;
       cursor: not-allowed;
       margin-top: 8px;
-      padding: 3px 0;
+      padding: 1px 0;
       border-radius: 5px;
     }
   }

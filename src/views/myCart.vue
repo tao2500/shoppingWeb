@@ -184,8 +184,8 @@
             ElMessage.warning("请填写收货人");
             return;
         }
-        if (shoppingAdd.value.telephone === "") {
-            ElMessage.warning("请填写联系电话");
+        if (shoppingAdd.value.telephone.length !== 11) {
+            ElMessage.warning("请填写正确联系电话");
             return;
         }
         if (shoppingAdd.value.address.length < 3) {
