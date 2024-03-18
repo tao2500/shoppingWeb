@@ -17,8 +17,9 @@
                 <el-option label="已退款" value="已退款"></el-option>
                 <el-option label="所有状态" value="所有状态"></el-option>
             </el-select>
+            <el-button type="primary" @click="exportExcel" style="margin-left: 20px">导出Excel</el-button>
         </div>
-        <el-table :data="tableData" style="width: 100%">
+        <el-table id="out-table" :data="tableData" style="width: 100%">
             <el-table-column fixed  prop="idOrderFrom" label="订单号"></el-table-column>
             <el-table-column prop="detail" label="内容"></el-table-column>
             <el-table-column prop="shoppingAdd" label="收货信息"></el-table-column>
@@ -83,6 +84,8 @@
     import {ElMessage, ElMessageBox} from "element-plus";
     import {delO, getAllOrders, getByStatu, sendO} from "../apis/admin/admin.js";
     import {playOKK} from "../apis/orderFrom/orderFrom.js";
+    import FileSaver from "file-saver";
+    import XLSX from "xlsx";
 
     let tableData = ref([{
         idOrderFrom: '123456789',
@@ -224,6 +227,37 @@
                 }
             })
         })
+    }
+
+    // 导出Excel
+    let xlsxParams = { raw: true };
+    function exportExcel() {
+        let xlsxParam = { raw: true };
+        /* 从表生成工作簿对象 */
+        let wb = XLSX.utils.table_to_book(
+            document.querySelector("#out-table"),
+            xlsxParam
+        );
+        /* 获取二进制字符串作为输出 */
+        let wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array",
+        });
+        try {
+            FileSaver.saveAs(
+                //Blob 对象表示一个不可变、原始数据的类文件对象。
+                //Blob 表示的不一定是JavaScript原生格式的数据。
+                //File 接口基于Blob，继承了 blob 的功能并将其扩展使其支持用户系统上的文件。
+                //返回一个新创建的 Blob 对象，其内容由参数中给定的数组串联组成。
+                new Blob([wbout], { type: "application/octet-stream" }),
+                //设置导出文件名称
+                "康无忧订单.xlsx"
+            );
+        } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
     }
 </script>
 

@@ -13,11 +13,14 @@
     "axios": "^1.6.2",
     "clipboard": "^2.0.11",
     "element-plus": "^2.4.4",
+    "file-saver": "^2.0.2",
     "qrcodejs2-fix": "^0.0.1",
     "qs": "^6.11.2",
     "unplugin-vue-components": "^0.26.0",
     "vue": "^3.3.11",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "xlsx": "^0.16.0",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
